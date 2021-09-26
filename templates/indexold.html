@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>磨床数据采集发送系统</title>
+<!--    @*1、Jquery组件引用*@-->
+    <script src="../static/js/jquery-3.5.1.min.js"></script>
+
+<!--    @*2、bootstrap组件引用*@-->
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/bootstrap.min.js"></script>
+
+<!--    @*3、bootstrap table组件以及中文包的引用*@-->
+    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css">
+    <script src="../static/js/bootstrap-table.min.js"></script>
+    <script src="../static/js/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../static/js/tableExport.min.js"></script>
+    <script src="../static/js/bootstrap-table-export.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">磨床数据采集发送系统</a>
+        </div>
+        <div  class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+<!--                <input type="text" class="form-control" placeholder="Search">-->
+                <lable>磨床:</lable>
+                <select id="roll" class="form-control" name="ROLL" >
+                    <option>0号磨床(HIECISE-MK84160)</option>
+                    <option>1号磨床(HIECISE-MK84125-01)</option>
+                    <option>2号磨床(HIECISE-MK84125-02)</option>
+                    <option>3号磨床(HIECISE-MK84125-03)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <lable>开始时间:</lable>
+                <input type="datetime-local" step="1" class="start-time"  id="s_time" />
+                <lable>结束时间:</lable>
+                <input type="datetime-local" step="1" class="end-time" id="e_time"/>
+<!--                <input type="submit" value="提交" ></input>-->
+                <button id="send" class="btn btn-default">搜索</button>
+            </div>
+
+        </div>
+
+        </div>
+    </nav>
+<!--{#     推荐用这种方式，比较灵活#}-->
+
+<div style="width: 80%;margin: 0 auto">
+     <div class="pull-left" style="padding-top: 10px">
+         <span id="exportToolbar" style="display: inline-block" class="btn-group">
+             <select id="sel_exportoption" class="form-control">
+                 <option value="">导出当前页数据</option>
+                 <option value="all">导出全部数据</option>
+                 <option value="selected">导出选中数据</option>
+             </select>
+         </span>
+     </div>
+    <table id="tabledata" class="table " ></table>
+</div>
+<!--{#     1.先定义一个空表#}-->
+<!--{#     2.用js初始化表，并填充数据#}-->
+<script type="text/javascript">
+
+//返回开始时间
+    function StartTime()
+    {
+        var now = new Date();
+
+        var year = now.getFullYear();       //年
+        var month = now.getMonth() + 1;     //月
+        var day = now.getDate();            //日
+
+
+        var clock = year + "-";
+
+        if(month < 10)
+            clock += "0";
+
+        clock += month + "-";
+
+        if(day < 10)
+            clock += "0";
+
+        clock += day + "T";
+
+        clock += "00:00:00";
+        return(clock);
+    }
+//返回结束日期
+    function EndTime()
+    {
+        var now = new Date();
+
+        var year = now.getFullYear();       //年
+        var month = now.getMonth() + 1;     //月
+        var day = now.getDate();            //日
+
+        var hh = now.getHours();            //时
+        var mm = now.getMinutes();          //分
+        var ss = now.getSeconds() ;         //秒
+
+
+        var clock = year + "-";
+
+        if(month < 10)
+            clock += "0";
+
+        clock += month + "-";
+
+        if(day < 10)
+            clock += "0";
+
+        clock += day + "T";
+
+        if(hh < 10)
+            clock += "0";
+
+        clock += hh + ":";
+
+        if (mm < 10)
+            clock += '0';
+
+        clock += mm + ":";
+
+        if (ss < 10)
+            clock += '0';
+
+        clock += ss ;
+
+        return(clock);
+    }
+    //时间初始化
+    $(function(){
+
+       $('#s_time').val(StartTime())
+    });
+    $(function(){
+
+       $('#e_time').val(EndTime())
+    });
+
+    function updata() {
+        StartTime:$('#s_time').val();
+        ROLL:$('#roll').val()
+	$('#tabledata').bootstrapTable({
+        // ajax : function (request) {
+        //     $.ajax({
+        //         type : "GET",
+        //         url : "/reload",
+        //         contentType: "application/json;charset=utf-8",
+        //         dataType:"json",//,offset:$('#tabledata').bootStrapTable('getOptions').pageNumber,limit:$('#bootStrapTableId').bootStrapTable('getOptions').limit
+        //         data: {ROLL:$('#roll').val(), StartTime:$('#s_time').val(), EndTime:$('#e_time').val(),offset:$('#tabledata').bootStrapTable('getOptions').pageNumber,limit:$('#bootStrapTableId').bootStrapTable('getOptions').limit },
+        //         success : function (msg) {
+        //             request.success({
+        //                 row : msg
+        //             });
+        //             $('#tabledata').bootstrapTable('load', msg);
+        //         },
+        //         error:function(){
+        //             alert("错误");
+        //         }
+        //     });
+        // },
+        url:'/reload',
+        queryParams : function(params) {
+				return {
+					limit: params.limit,
+					offset: params.offset,
+	               // userName: $.trim( $('#userName').val() ) ,
+	               // age: $.trim( $('#age').val() ) ,
+                    ROLL:$('#roll').val(),
+                    StartTime:$('#s_time').val(),
+                    EndTime:$('#e_time').val()
+				}
+			},
+
+		toolbar:'#toolbar',
+        pagination: true, //前端处理分页
+        singleSelect: false,//是否只能单选
+        striped: true, //是否显示行间隔色
+        cache: true, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pageNumber: 1, //初始化加载第10页，默认第一页
+        pageSize: 10, //每页的记录行数（*）
+        pageList: [10, 20, 50, 100], //可供选择的每页的行数（*）
+		clickToSelect:true,
+		sortName: "create_time",
+		sortOrder: "desc",
+        showColumns: true, //显示内容列下拉框
+        minimumCountColumns: 2, //当列数小于此值时，将隐藏内容列下拉框
+        uniqueId: "id", //每一行的唯一标识，一般为主键列
+        showToggle: true, //是否显示详细视图和列表视图的切换按钮
+        cardView: false, //是否显示详细视图
+       // queryParamsType:'limit',
+        sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+        showExport: true, //导出按钮
+        exportDataType: "selected", //导出表格方式（默认basic：只导出当前页的表格数据；all：导出所有数据；selected：导出选中的数据）
+        exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'], //导出文件类型
+		columns: [{
+                checkbox: true,
+                visible: true,
+            },{
+                field: 'c_id',
+                title: '序号',
+                align: 'center',  //对齐方式，居中
+            }, {
+                field: 'c_roll_number',
+                title: '辊号',
+                align: 'center'
+            }, {
+                field: 'c_program_number',
+                title: '程序号',
+                align: 'center',
+            }, {
+                field: 'c_operator',
+                title: '操作者',
+                align: 'center',
+            }, {
+                field: 'c_shift',
+                title: '班次',
+                align: 'center',
+            }, {
+                field: 'c_curve',
+                title: '曲线',
+                align: 'center',
+            }, {
+                field: 'c_diameter',
+                title: '直径',
+                align: 'center',
+            }, {
+                field: 'c_diameter_before',
+                title: '磨前直径',
+                align: 'center',
+            }, {
+                field: 'c_error',
+                title: '误差',
+                align: 'center',
+            }, {
+                field: 'c_coaxiality',
+                title: '同轴度',
+                align: 'center',
+            }, {
+                field: 'c_cylindricity',
+                title: '圆柱度',
+                align: 'center',
+            }, {
+                field: 'c_roundness',
+                title: '圆度',
+                align: 'center',
+            }, {
+                field: 'c_wheel_diameter',
+                title: '砂轮直径',
+                align: 'center',
+            }, {
+                field: 'c_actual_convexity',
+                title: '实际凸度',
+                align: 'center',
+            }, {
+                field: 'c_start_time',
+                title: '开始时间',
+                align: 'center',
+            }, {
+                field: 'c_end_time',
+                title: '结束时间',
+                align: 'center',
+            }, {
+                field: 'c_grinding_machine',
+                title: '磨床',
+                align: 'center',
+            }, {
+                field: 'c_date',
+                title: '日期',
+                align: 'center',
+            }, {
+                title: '操作',
+                field: 'id',
+                align: 'center',
+                formatter: function (value, row) {
+                    var e = '<a href="#" mce_href="#" onclick="edit(\'' + row.id + '\')">编辑</a> ';  //row.id为每行的id
+                    var d = '<a href="#" mce_href="#" onclick="del(\'' + row.id + '\')">删除</a> ';
+                    return e + d;
+                }
+            }],
+    })}
+    $(function (){updata()})
+
+    $('#send').click(function(){
+        alert('asda')
+        console.log('dd');
+        // $.ajax({
+        //      type: "GET",
+        //      url: "/reload",
+        //      data: {ROLL:$('#roll').val(), StartTime:$('#s_time').val(), EndTime:$('#e_time').val()},
+        //      dataType: "json",
+        //      success: function(data){
+        //          // alert(JSON.stringify(data))
+        //         console.log(JSON.stringify(data));
+        //          jsondata = JSON.stringify(data);
+        //         // $("#table").bootstrapTable('refresh');
+        //         // $("#tabledata").bootstrapTable('load',data);
+        //          updata()
+        //                      /*if (data={'data':'未搜索到数据'}){
+        //                          window.alert("未搜索到数据");
+        //                      }
+        //                      else {
+        //
+        //                      }*/
+        //
+        //               }
+        //  });
+        $("#tabledata").bootstrapTable('destroy');
+        //
+        // $("#tabledata").bootstrapTable('refresh');
+        updata();
+    });
+
+
+
+
+    $(function(){
+
+       $('#s_time').val(StartTime())
+
+});
+    $(function(){
+
+       $('#e_time').val(EndTime())
+
+});
+
+
+
+</script>
+</body>
+</html>
