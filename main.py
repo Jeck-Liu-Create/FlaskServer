@@ -40,7 +40,7 @@ class DateEncoder(json.JSONEncoder):
 app = Flask(__name__)
 @app.route('/')         #设置路由
 def index():           # 设置路由对应的函数
-    return render_template("indexold.html")
+    return render_template("index.html")
 
 #初始加载数据库
 @app.route('/jsondata', methods=['POST', 'GET'])

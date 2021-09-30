@@ -65,38 +65,142 @@
 <!--{#     1.先定义一个空表#}-->
 <!--{#     2.用js初始化表，并填充数据#}-->
 <script type="text/javascript">
-    $(function () {
-        $('#tabledata').bootstrapTable({
-            url: '/jsondata?',  // 请求数据源的路由
-            dataType: "json",
-            pagination: true, //前端处理分页
-            singleSelect: false,//是否只能单选
-            search: true, //显示搜索框，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-            toolbar: '#toolbar', //工具按钮用哪个容器
-            striped: true, //是否显示行间隔色
-            cache: true, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-            pageNumber: 1, //初始化加载第10页，默认第一页
-            pageSize: 10, //每页的记录行数（*）
-            pageList: [10, 20, 50, 100], //可供选择的每页的行数（*）
-            // strictSearch: true,//设置为 true启用 全匹配搜索，false为模糊搜索
-            showColumns: true, //显示内容列下拉框
-            showRefresh: true, //显示刷新按钮
-            minimumCountColumns: 2, //当列数小于此值时，将隐藏内容列下拉框
-            // clickToSelect: true, //设置true， 将在点击某行时，自动勾选rediobox 和 checkbox
-            height: 500, //表格高度，如果没有设置height属性，表格自动根据记录条数决定表格高度#}
-            uniqueId: "id", //每一行的唯一标识，一般为主键列
-            showToggle: true, //是否显示详细视图和列表视图的切换按钮
-            cardView: false, //是否显示详细视图
-// <!--            detailView: true, //是否显示父子表，设置为 true 可以显示详细页面模式,在每行最前边显示+号#}-->
-            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
-            showExport: true, //导出按钮
-            exportDataType: "all", //导出表格方式（默认basic：只导出当前页的表格数据；all：导出所有数据；selected：导出选中的数据）
-            exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'], //导出文件类型
-            // {
-            //     checkbox: true,
-            //     visible: true,
-            // },
-            columns: [{
+
+//返回开始时间
+    function StartTime()
+    {
+        var now = new Date();
+
+        var year = now.getFullYear();       //年
+        var month = now.getMonth() + 1;     //月
+        var day = now.getDate();            //日
+
+
+        var clock = year + "-";
+
+        if(month < 10)
+            clock += "0";
+
+        clock += month + "-";
+
+        if(day < 10)
+            clock += "0";
+
+        clock += day + "T";
+
+        clock += "00:00:00";
+        return(clock);
+    }
+//返回结束日期
+    function EndTime()
+    {
+        var now = new Date();
+
+        var year = now.getFullYear();       //年
+        var month = now.getMonth() + 1;     //月
+        var day = now.getDate();            //日
+
+        var hh = now.getHours();            //时
+        var mm = now.getMinutes();          //分
+        var ss = now.getSeconds() ;         //秒
+
+
+        var clock = year + "-";
+
+        if(month < 10)
+            clock += "0";
+
+        clock += month + "-";
+
+        if(day < 10)
+            clock += "0";
+
+        clock += day + "T";
+
+        if(hh < 10)
+            clock += "0";
+
+        clock += hh + ":";
+
+        if (mm < 10)
+            clock += '0';
+
+        clock += mm + ":";
+
+        if (ss < 10)
+            clock += '0';
+
+        clock += ss ;
+
+        return(clock);
+    }
+    //时间初始化
+    $(function(){
+
+       $('#s_time').val(StartTime())
+    });
+    $(function(){
+
+       $('#e_time').val(EndTime())
+    });
+
+    function updata() {
+        StartTime:$('#s_time').val();
+        ROLL:$('#roll').val()
+	$('#tabledata').bootstrapTable({
+        // ajax : function (request) {
+        //     $.ajax({
+        //         type : "GET",
+        //         url : "/reload",
+        //         contentType: "application/json;charset=utf-8",
+        //         dataType:"json",//,offset:$('#tabledata').bootStrapTable('getOptions').pageNumber,limit:$('#bootStrapTableId').bootStrapTable('getOptions').limit
+        //         data: {ROLL:$('#roll').val(), StartTime:$('#s_time').val(), EndTime:$('#e_time').val(),offset:$('#tabledata').bootStrapTable('getOptions').pageNumber,limit:$('#bootStrapTableId').bootStrapTable('getOptions').limit },
+        //         success : function (msg) {
+        //             request.success({
+        //                 row : msg
+        //             });
+        //             $('#tabledata').bootstrapTable('load', msg);
+        //         },
+        //         error:function(){
+        //             alert("错误");
+        //         }
+        //     });
+        // },
+        url:'/reload',
+        queryParams : function(params) {
+				return {
+					limit: params.limit,
+					offset: params.offset,
+	               // userName: $.trim( $('#userName').val() ) ,
+	               // age: $.trim( $('#age').val() ) ,
+                    ROLL:$('#roll').val(),
+                    StartTime:$('#s_time').val(),
+                    EndTime:$('#e_time').val()
+				}
+			},
+
+		toolbar:'#toolbar',
+        pagination: true, //前端处理分页
+        singleSelect: false,//是否只能单选
+        striped: true, //是否显示行间隔色
+        cache: true, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pageNumber: 1, //初始化加载第10页，默认第一页
+        pageSize: 10, //每页的记录行数（*）
+        pageList: [10, 20, 50, 100], //可供选择的每页的行数（*）
+		clickToSelect:true,
+		sortName: "create_time",
+		sortOrder: "desc",
+        showColumns: true, //显示内容列下拉框
+        minimumCountColumns: 2, //当列数小于此值时，将隐藏内容列下拉框
+        uniqueId: "id", //每一行的唯一标识，一般为主键列
+        showToggle: true, //是否显示详细视图和列表视图的切换按钮
+        cardView: false, //是否显示详细视图
+       // queryParamsType:'limit',
+        sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+        showExport: true, //导出按钮
+        exportDataType: "selected", //导出表格方式（默认basic：只导出当前页的表格数据；all：导出所有数据；selected：导出选中的数据）
+        exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'], //导出文件类型
+		columns: [{
                 checkbox: true,
                 visible: true,
             },{
@@ -180,138 +284,53 @@
                     var d = '<a href="#" mce_href="#" onclick="del(\'' + row.id + '\')">删除</a> ';
                     return e + d;
                 }
-            }
-            ],
-        });
-    });
+            }],
+    })}
+    $(function (){updata()})
 
-//设置下拉框选择事件，选中后就将对应属性设置到表格exportDataType中
-//     $("#sel_exportoption").change(function () {
-//         //刷新参数设置
-//         $('#tabledata').bootstrapTable('refreshOptions', {
-//             exportDataType: $(this).val()
-//         });
-//         console.log($(this).val())
-//     });
-
-
-//返回刷新后的数据
-     $('#send').click(function(){
-        // // var opt = '/reloda2/';
-        // var url = '/reload2/';
-        // if ($('#roll').val()) {
-        //     url = url + '&' + $('#roll').val();
-        // }
-        // if ($('#s_time').val()) {
-        //     url = url + '&' + $('#s_time').val();
-        // }
-        // if ($('#e_time').val()) {
-        //     url = url + '&' + $('#e_time').val();
-        // }
-        // var opt = {
-        //     url: url
-        // };
+    $('#send').click(function(){
+        // alert('asda')
+        console.log('dd');
+        // $.ajax({
+        //      type: "GET",
+        //      url: "/reload",
+        //      data: {ROLL:$('#roll').val(), StartTime:$('#s_time').val(), EndTime:$('#e_time').val()},
+        //      dataType: "json",
+        //      success: function(data){
+        //          // alert(JSON.stringify(data))
+        //         console.log(JSON.stringify(data));
+        //          jsondata = JSON.stringify(data);
+        //         // $("#table").bootstrapTable('refresh');
+        //         // $("#tabledata").bootstrapTable('load',data);
+        //          updata()
+        //                      /*if (data={'data':'未搜索到数据'}){
+        //                          window.alert("未搜索到数据");
+        //                      }
+        //                      else {
         //
-        // console.log(opt);
-        // $("#table").bootstrapTable('refresh', opt);
-         $.ajax({
-             type: "GET",
-             url: "/reload",
-             data: {ROLL:$('#roll').val(), StartTime:$('#s_time').val(), EndTime:$('#e_time').val()},
-             dataType: "json",
-             success: function(data){
-                 alert(JSON.stringify(data))
-                console.log(JSON.stringify(data));
-                 jsondata = JSON.stringify(data);
-                // $("#table").bootstrapTable('refresh');
-                $("#tabledata").bootstrapTable('load',data);
-                             /*if (data={'data':'未搜索到数据'}){
-                                 window.alert("未搜索到数据");
-                             }
-                             else {
-
-                             }*/
-                      }
-         });
+        //                      }*/
+        //
+        //               }
+        //  });
+        $("#tabledata").bootstrapTable('destroy');
+        //
+        // $("#tabledata").bootstrapTable('refresh');
+        updata();
     });
 
-//返回开始时间
-     function StartTime()
-    {
-        var now = new Date();
-
-        var year = now.getFullYear();       //年
-        var month = now.getMonth() + 1;     //月
-        var day = now.getDate();            //日
 
 
-        var clock = year + "-";
-
-        if(month < 10)
-            clock += "0";
-
-        clock += month + "-";
-
-        if(day < 10)
-            clock += "0";
-
-        clock += day + "T";
-
-        clock += "00:00:00";
-        return(clock);
-    }
-//返回结束日期
-         function EndTime()
-    {
-        var now = new Date();
-
-        var year = now.getFullYear();       //年
-        var month = now.getMonth() + 1;     //月
-        var day = now.getDate();            //日
-
-        var hh = now.getHours();            //时
-        var mm = now.getMinutes();          //分
-        var ss = now.getSeconds() ;         //秒
-
-
-        var clock = year + "-";
-
-        if(month < 10)
-            clock += "0";
-
-        clock += month + "-";
-
-        if(day < 10)
-            clock += "0";
-
-        clock += day + "T";
-
-        if(hh < 10)
-            clock += "0";
-
-        clock += hh + ":";
-
-        if (mm < 10)
-            clock += '0';
-
-        clock += mm + ":";
-
-        if (ss < 10)
-            clock += '0';
-
-        clock += ss ;
-
-        return(clock);
-    }
 
     $(function(){
 
        $('#s_time').val(StartTime())
-    });
+
+});
     $(function(){
 
        $('#e_time').val(EndTime())
-    });
+
+});
 
 
 
