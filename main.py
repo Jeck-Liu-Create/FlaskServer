@@ -21,9 +21,7 @@ from utils import Change
 
 
 
-con = mysql.connect(user='root',password='Data123..',db="test")
-con.autocommit(True)
-cur = con.cursor()
+
 
 datalist = list()
 
@@ -50,9 +48,14 @@ def info():
     return infodata(sql,txt)
 
 def infodata(sql,txt:str):
+    con = mysql.connect(user='root', password='Data123..', db="test")
+    con.autocommit(True)
+    cur = con.cursor()
     print(txt)
     cur.execute(sql)
     data = cur.fetchall()
+    cur.close()
+    con.close()
     print(data)
     if data:
         print(data)
