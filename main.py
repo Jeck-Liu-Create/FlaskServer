@@ -38,7 +38,7 @@ class DateEncoder(json.JSONEncoder):
 app = Flask(__name__)
 @app.route('/')         #设置路由
 def index():           # 设置路由对应的函数
-    return render_template("index.html")
+    return render_template("from.html")
 
 #初始加载数据库
 @app.route('/jsondata', methods=['POST', 'GET'])
@@ -89,7 +89,7 @@ def infodata(sql,txt:str):
                  "c_wheel_diameter": datalist[i][12], "c_actual_convexity": datalist[i][13],
                  "c_start_time": (datalist[i][14]).strftime("%Y-%m-%d %H:%M:%S"),
                  "c_end_time": (datalist[i][15]).strftime("%Y-%m-%d %H:%M:%S"), "c_grinding_machine": datalist[i][16],
-                 "c_date": (datalist[i][17]).strftime("%Y-%m-%d")}
+                 "c_date": (datalist[i][17]).strftime("%Y-%m-%d"),"c_frame_id": datalist[i][18]}
             data.append(d)
             # print(data)
             print('7')

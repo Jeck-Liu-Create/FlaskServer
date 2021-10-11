@@ -111,8 +111,13 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <input type="hidden" class="form-control" disabled="disabled" id="modal_c_id">
+                        <label for="modal_c_roll_number" class="col-sm-2 control-label">轧辊编号</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" disabled="disabled" id="modal_c_roll_number">
+                        </div>
                         <label for="modal_c_pairing_roll" class="col-sm-2 control-label">配对辊号</label>
-                        <div class="col-sm-8">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control" id="modal_c_pairing_roll">
                         </div>
                     </div>
@@ -121,44 +126,11 @@
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="modal_c_top_diameter">
                         </div>
-                        <label for="modal_c_low_diameter" class="col-sm-2 control-label">锥形顶端直径</label>
+                        <label for="modal_c_low_diameter" class="col-sm-2 control-label">锥形底端直径</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="modal_c_low_diameter">
                         </div>
                     </div>
-
-
-<!--                    <div class="form-group">-->
-<!--                        <input type="hidden" class="form-control" disabled="disabled" id="modal_c_id">-->
-<!--                        <label for="modal_c_roll_number" class="col-sm-2 control-label">辊号</label>-->
-<!--                        <div class="col-sm-9">-->
-<!--                            <input type="text" class="form-control" disabled="disabled" id="modal_c_roll_number">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="modal_c_program_number" class="col-sm-2 control-label">程序号</label>-->
-<!--                        <div class="col-sm-9">-->
-<!--                            <input type="text" class="form-control" id="modal_c_program_number">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="modal_c_operator" class="col-sm-2 control-label">操作者</label>-->
-<!--                        <div class="col-sm-9">-->
-<!--                            <input type="text" class="form-control" id="modal_c_operator">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="modal_c_shift" class="col-sm-2 control-label" >班次</label>-->
-<!--                        <div class="col-sm-9">-->
-<!--                            <input type="text" class="form-control" id="modal_c_shift">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="modal_c_curve" class="col-sm-2 control-label" >曲线</label>-->
-<!--                        <div class="col-sm-9">-->
-<!--                            <input type="text" class="form-control" id="modal_c_curve">-->
-<!--                        </div>-->
-<!--                    </div>-->
                 </form>
             </div>
             <div class="modal-footer">
@@ -335,7 +307,6 @@
 		toolbar:'#toolbox',
         pagination: true, //前端处理分页
         singleSelect: false,//是否只能单选
-        striped: true, //是否显示行间隔色
         cache: true, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
         pageNumber: 1, //初始化加载第10页，默认第一页
         pageSize: 10, //每页的记录行数（*）
@@ -431,6 +402,11 @@
                 align: 'center',
             },
             {
+                field: 'c_frame_id',
+                title: '机架号',
+                align: 'center',
+            },
+            {
                 title: '操作',
                 field: 'c_id',
                 align: 'center',
@@ -461,27 +437,35 @@
     function actionFormatter(value, row ,index) {
         var id = value;
         var result = "";
-        var list = [];
+        // list = [ ID , 轧辊号 ， 直径 ， 实际凸度 ， 机架号]
+        var list = [row.c_id,row.c_roll_number,row.c_diameter,row.c_actual_convexity,row.c_frame_id];
         var c_id = row.c_id;
+        var c_frame_id = row.c_frame_id;
         // var c_roll_number = row.c_roll_number;
         // var c_program_number = row.c_program_number;
         // var
-        list.push(row.c_id);
+        // list.push(c_id);
+        // list.push(c_frame_id)
+
 
 
         result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"EditViewById('"+ list + "', view='view')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
-        result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"EditViewById('" + id + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
-        result += "<a href='javascript:;' class='btn btn-xs red' onclick=\"DeleteByIds('" + id + "')\" title='删除'><span class='glyphicon glyphicon-remove'></span></a>";
+        result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"EditViewById('" + list + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
+        result += "<a href='javascript:;' class='btn btn-xs red' onclick=\"DeleteByIds('" + list + "')\" title='删除'><span class='glyphicon glyphicon-remove'></span></a>";
         return result;
     }
-    function EditViewById(row){
-        alert(row[0])
+    function EditViewById(data){
+        alert(data);
+
+        let row = data.split(",");
+        // console.log(typeof(row[1]));
         // var row = $("tabledata").bootstrapTable('getData',false);
-        // $("#modal_c_id").val(row[0]);
-        // $("#modal_c_roll_number").val(row[1]);
-        // $("#modal_c_program_number").val(row[2]);
-        // $("#modal_c_operator").val(row[3]);
-        // $("#modal_c_shift").val(row[4]);
+        $("#modal_c_id").val(row[0]);//数据库ID
+        $("#modal_c_roll_number").val(row[1]);//轧辊编号
+        console.log('轧辊标号'+row[1]);
+        $("#modal_c_diameter").val(row[2]);//直径
+        $("#modal_c_actual_convexity").val(row[3]);//凸度
+        $("#modal_c_frame_id").val(row[4]);//机架号
         $("#myModal").modal();
     }
     // $('#delModal').on('show.bs.modal' , function (event)){
