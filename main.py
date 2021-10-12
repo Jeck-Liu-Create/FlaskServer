@@ -89,7 +89,10 @@ def infodata(sql,txt:str):
                  "c_wheel_diameter": datalist[i][12], "c_actual_convexity": datalist[i][13],
                  "c_start_time": (datalist[i][14]).strftime("%Y-%m-%d %H:%M:%S"),
                  "c_end_time": (datalist[i][15]).strftime("%Y-%m-%d %H:%M:%S"), "c_grinding_machine": datalist[i][16],
-                 "c_date": (datalist[i][17]).strftime("%Y-%m-%d"),"c_frame_id": datalist[i][18]}
+                 "c_date": (datalist[i][17]).strftime("%Y-%m-%d"),"c_frame_id": datalist[i][18],"c_roll_type": datalist[i][19],
+                 "c_roll_position": datalist[i][20],"c_roll_material": datalist[i][21],"c_crown_symbol": datalist[i][22],
+                 "c_roughness": datalist[i][23],"c_side_bearing": datalist[i][24],"c_drive_bearingd": datalist[i][25],
+                 "c_pairing_roll": datalist[i][26],"c_top_diameter": datalist[i][27],"c_low_diameter": datalist[i][28]}
             data.append(d)
             # print(data)
             print('7')
@@ -123,7 +126,7 @@ def delete():
     print(ID)
     sql = 'delete from grinder_data where ="%s"' %(ID)
     print(sql)
-    cur.execute(sql)
+    # cur.execute(sql)
     return "ok"
 
 @app.route('/add')
@@ -132,17 +135,24 @@ def add():
     age = request.args.get('age')
     sql = 'insert into userlist values("%s","%s")' %(name,age)
     print(sql)
-    cur.execute(sql)
+    # cur.execute(sql)
     return "ok"
 
-@app.route('/edit')
+@app.route('/edit', methods=["GET","POST"])
 def edit():
-    name = request.args.get('name')
-    age = request.args.get('age')
-    sql = 'update grinder_data set age=%s where name="%s"' %(age,name)
-    print(sql)
-    cur.execute(sql)
-    return "ok"
+    data = json.loads(request.form.get('data'))
+    # request_json = request.get_json(force=True)
+    print(data)
+    # c_frame_id = request.args.get('name')
+    # age = request.args.get('age')
+    # sql = 'update grinder_data set age=%s where name="%s"' %(age,name)
+    # print(sql)
+    # cur.execute(sql)
+    # return jsonify({
+    #     "name": name,
+    #     "gender": gender
+    # })
+    return data
 # ajax数据处理
 @app.route('/reload', methods=["GET","POST"])
 def reload():
