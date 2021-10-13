@@ -25,5 +25,11 @@ class Change:
         str = self.data[5:-1]
         print(str)
         return str
+    def IFNone(self):
+        str = ''
+        if self is None:
+            return str
+        else:
+            return self
 if  __name__ == '__main__':
     ch = Change('0号磨床(HIECISE-MK84160)').GetROLL()
