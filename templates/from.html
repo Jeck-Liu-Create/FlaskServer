@@ -83,9 +83,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="modal_c_actual_convexity" class="col-sm-2 control-label">轧辊凸度</label>
+                        <label for="modal_c_crown_value" class="col-sm-2 control-label">凸度直</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" disabled="disabled" id="modal_c_actual_convexity">
+                            <input type="text" class="form-control"  id="modal_c_crown_value" value="0000">
                         </div>
                         <label for="modal_c_roll_position" class="col-sm-2 control-label">凸度正负标记</label>
                         <div class="col-sm-3">
@@ -118,6 +118,7 @@
                     </div>
                     <div class="form-group">
                         <input type="hidden" class="form-control" disabled="disabled" id="modal_c_id">
+                        <input type="hidden" class="form-control" disabled="disabled" id="modal_index">
                         <label for="modal_c_roll_number" class="col-sm-2 control-label">轧辊编号</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" disabled="disabled" id="modal_c_roll_number">
@@ -137,15 +138,43 @@
                             <input type="text" class="form-control" id="modal_c_low_diameter">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="modal_c_cause" class="col-sm-2 control-label">磨削原因</label>
+                        <div class="col-sm-3">
+                            <select id="modal_c_cause" class="form-control" name="c_roll_position" >
+                                <option selected hidden disabled value="">选择磨削原因</option>
+                                <option>正常磨削</option>
+                                <option>配辊磨削</option>
+                                <option>事故加磨</option>
+                                <option>断带无伤</option>
+                                <option>辊印</option>
+                                <option>划痕</option>
+                                <option>划伤</option>
+                                <option>小片粘钢</option>
+                                <option>大片粘钢</option>
+                                <option>轧辊烧伤</option>
+                                <option>缠钢勒辊</option>
+                            </select>
+                        </div>
+                        <label for="modal_c_result_detection" class="col-sm-2 control-label">探伤结果</label>
+                        <div class="col-sm-3">
+                            <textarea  type="text" class="form-control" id="modal_c_result_detection"></textarea >
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="sava-edit-btn">保存</button>
+                <div class="col-sm-7">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="sava-edit-btn">保存</button>
+                </div>
+                <div class="col-sm-5">
+                    <button type="button" class="btn btn-success  glyphicon glyphicon-send" id="send-btn">&nbsp 发送</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    </div>
 
     <nav class="navbar navbar-default navbar-light " role="navigation" style="background-color: #e3f2fd;">
         <div class="container-fluid">
@@ -208,8 +237,6 @@
     function clearmLoading() {
         $("body").mLoading("hide");//隐藏loading组件
     }
-
-
 
 //返回开始时间
     function StartTime()
@@ -289,11 +316,11 @@
        $('#e_time').val(EndTime())
     });
 
-    function updata() {
+      function updata() {
         console.log("Search_roll_nm="+$("#Search_roll_nm").val());
         var ROLL_NM = '';
         var str = $("#Search_roll_nm").val();
-        if (str == '' || str == undefined || str == null) {
+        if (str === '' || str === undefined || str == null) {
             //return true;
             console.log('空');
             ROLL_NM = 'null';
@@ -301,7 +328,7 @@
             //return false;
             console.log('非空');
             ROLL_NM = str;
-        };
+        }
 	    $('#tabledata').bootstrapTable({
         // ajax : function (request) {
         //     $.ajax({
@@ -334,7 +361,6 @@
                     ROLLNM:ROLL_NM,
 				}
 			},
-
 		toolbar:'#toolbox',
         fixedColumns: true,
         fixedNumber: 2,
@@ -358,72 +384,70 @@
         exportDataType: "selected", //导出表格方式（默认basic：只导出当前页的表格数据；all：导出所有数据；selected：导出选中的数据）
         exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'], //导出文件类型
 		columns: [{
-            //#1 选择
+            //#0 选择
                 checkbox: true,
                 visible: true,
             },{
-            //#31 操作
+            //#1 操作
                 title: '操作',
                 field: 'c_id',
                 align: 'center',
                 formatter: actionFormatter
             },{
             //#2 序号
-                field: 'c_id',
+                field: 'number',
                 title: '序号',
+                align: 'center'
+            }, {
+            //#3 机架号
+                field: 'c_frame_id',
+                title: '机架号',
                 align: 'center',
             }, {
-            //#3 轧辊号
+            //#4 轧辊号
                 field: 'c_roll_number',
                 title: '辊号',
                 align: 'center'
             }, {
-            //#4 程序号
-                field: 'c_program_number',
-                title: '程序号',
-                align: 'center',
-                visible: false,
+            //#5 配对轧辊号
+                field: 'c_pairing_roll',
+                title: '配对辊号',
+                align: 'center'
             }, {
-            //#5 操作者
-                field: 'c_operator',
-                title: '操作者',
-                align: 'center',
-                visible: false,
-            }, {
-            //#6 班次
-                field: 'c_shift',
-                title: '班次',
-                align: 'center',
-                visible: false,
-            }, {
-            //#7 曲线
-                field: 'c_curve',
-                title: '曲线',
+            //#6 轧辊位置
+                field: 'c_roll_position',
+                title: '轧辊位置',
                 align: 'center',
             }, {
-            //#8 直径
-                field: 'c_diameter',
-                title: '直径',
-                align: 'center',
-            }, {
-            //#9 磨前直径
+            //#7 磨前直径
                 field: 'c_diameter_before',
                 title: '磨前直径',
                 align: 'center',
             }, {
-            //#10 误差
-                field: 'c_error',
-                title: '误差',
+            //#8 磨后直径
+                field: 'c_diameter',
+                title: '磨后直径',
                 align: 'center',
             }, {
-            //#11 同轴度
-                field: 'c_coaxiality',
-                title: '同轴度',
+            //#9 磨削量
+                field: 'c_grinding_amount',
+                title: '磨削量',
+                align: 'center',
+                visible: true,
+            }, {
+            //#10 曲度
+                field: 'c_curve',
+                title: '曲度',
                 align: 'center',
             }, {
-            //#12 圆柱度
-                field: 'c_cylindricity',
-                title: '圆柱度',
+            //#11 凸度值 c_crown_value
+                field: 'c_crown_value',
+                title: '凸度值',
+                align: 'center',
+            }, {
+            //#12 凸度正负标记
+                field: 'c_crown_symbol',
+                title: '凸度正负标记',
                 align: 'center',
             }, {
             //#13 圆度
@@ -431,99 +455,127 @@
                 title: '圆度',
                 align: 'center',
             }, {
-            //#14 砂轮直径
-                field: 'c_wheel_diameter',
-                title: '砂轮直径',
+            //#14 圆柱度
+                field: 'c_cylindricity',
+                title: '圆柱度',
                 align: 'center',
             }, {
-            //#15 实际凸度
-                field: 'c_actual_convexity',
-                title: '实际凸度',
+            //#15 同轴度
+                field: 'c_coaxiality',
+                title: '同轴度',
                 align: 'center',
             }, {
-            //#16 开始时间
-                field: 'c_start_time',
-                title: '开始时间',
-                align: 'center',
-            }, {
-            //#17 结束时间
-                field: 'c_end_time',
-                title: '结束时间',
-                align: 'center',
-            }, {
-            //#18 磨床
-                field: 'c_grinding_machine',
-                title: '磨床',
-                align: 'center',
-            }, {
-            //#19 日期
-                field: 'c_date',
-                title: '日期',
-                align: 'center',
-            }, {
-            //#20 机架号
-                field: 'c_frame_id',
-                title: '机架号',
-                align: 'center',
-            }, {
-            //#21 轧辊类型
-                field: 'c_roll_type',
-                title: '轧辊类型',
-                align: 'center',
-            }, {
-            //#22 轧辊位置
-                field: 'c_roll_position',
-                title: '轧辊位置',
-                align: 'center',
-            }, {
-            //#23 轧辊材质
-                field: 'c_roll_material',
-                title: '轧辊材质',
-                align: 'center',
-            }, {
-            //#24 凸度正负标记
-                field: 'c_crown_symbol',
-                title: '凸度正负标记',
-                align: 'center',
-            }, {
-            //#25 粗糙度
+            //#16 粗糙度
                 field: 'c_roughness',
                 title: '粗糙度',
                 align: 'center',
             }, {
-            //#26 操作侧轴承号
-                field: 'c_side_bearing',
-                title: '操作侧轴承号',
+            //#17 误差
+                field: 'c_error',
+                title: '误差',
                 align: 'center',
             }, {
-            //#27 驱动侧轴承号
+            //#19 磨削原因
+                field: 'c_cause',
+                title: '磨削原因',
+                align: 'center',
+            }, {
+            //#20 探伤结果
+                field: 'c_result_detection',
+                title: '探伤结果',
+                align: 'center',
+            }, {
+            //#21 日期
+                field: 'c_date',
+                title: '日期',
+                align: 'center',
+            }, {
+            //#22 操作者
+                field: 'c_operator',
+                title: '操作者',
+                align: 'center',
+                visible: true,
+            }, {
+            //#23 砂轮直径
+                field: 'c_wheel_diameter',
+                title: '砂轮直径',
+                align: 'center',
+            }, {
+            //#24 轧辊材质
+                field: 'c_roll_material',
+                title: '轧辊材质',
+                align: 'center',
+            }, {
+            //#25 轧辊类型
+                field: 'c_roll_type',
+                title: '轧辊类型',
+                align: 'center',
+            }, {
+            //#26 驱动侧轴承号
                 field: 'c_drive_bearingd',
                 title: '驱动侧轴承号',
                 align: 'center',
             }, {
-            //#28 配对辊号
-                field: 'c_pairing_roll',
-                title: '配对辊号',
+            //#27 操作侧轴承号
+                field: 'c_side_bearing',
+                title: '操作侧轴承号',
                 align: 'center',
             }, {
-            //#29 锥形顶端直径
+            //#28 开始时间
+                field: 'c_start_time',
+                title: '开始时间',
+                align: 'center',
+            }, {
+            //#29 结束时间
+                field: 'c_end_time',
+                title: '结束时间',
+                align: 'center',
+            }, {
+            //#30 磨床
+                field: 'c_grinding_machine',
+                title: '磨床',
+                align: 'center',
+            }, {
+            //#31 锥形顶端直径
                 field: 'c_top_diameter',
                 title: '锥形顶端直径',
                 align: 'center',
             }, {
-            //#30 锥形底端直径
+            //#32 锥形底端直径
                 field: 'c_low_diameter',
                 title: '锥形底端直径',
                 align: 'center',
-            },
+            }, {
+            //#33 c_actual_convexity
+                field: 'c_actual_convexity',
+                title: '实际凸度',
+                align: 'center',
+            }, {
+            //#34 班次c_shift
+                field: 'c_shift',
+                title: '班次',
+                align: 'center',
+            }, {
+            //#35 程序号c_program_number
+                field: 'c_shift',
+                title: '程序号',
+                align: 'center',
+            }, {
+            //#36
+                field: 'c_id',
+                title: 'ID',
+                visible:false,
+                align: 'center',
+        }
         ],
         onLoadSuccess: function (){
         },
         onLoadError: function (){
             showTips("数据加载失败！");
         },
-        onDblClickRow: function (row, $element) {
-        var list = [row.c_id,row.c_roll_number,row.c_diameter,row.c_actual_convexity,row.c_frame_id,row.c_roll_type,row.c_roll_position,row.c_roll_material,row.c_crown_symbol,row.c_roughness,row.c_side_bearing,row.c_drive_bearing,row.c_pairing_roll,row.c_top_diameter,row.c_low_diameter];
+        onDblClickRow: function ( row ) {
+            var list = [row.c_id,row.c_roll_number,row.c_diameter,row.c_frame_id,row.c_roll_type,row.c_roll_position,row.c_roll_material,row.c_crown_symbol,row.c_roughness,row.c_side_bearing,row.c_drive_bearing,row.c_pairing_roll,row.c_top_diameter,row.c_low_diameter,row.number,row.c_cause,row.c_result_detection,row.c_crown_value];
+            console.log(list);
             EditViewById(list);
         }
 
@@ -531,29 +583,17 @@
 
     }
 
-
-
-    function actionFormatter(value, row ,index) {
-        var id = value;
+    function actionFormatter( value, row) {
         var result = "";
-        // list = [ [0]ID , [1]轧辊号 ， [2]直径 ， [3]实际凸度 ， [4]机架号 ，[5]轧辊类型 ，[6]轧辊位置 ，[7]轧辊材质 ， [8]凸度正负标记 ， [9]粗糙度， [10]操作侧轴承号 ， [11]驱动侧轴承号 ， [12]配对辊号 ， [13]锥形顶端直径 ， [14]锥形底端直径]
-        var list = [row.c_id,row.c_roll_number,row.c_diameter,row.c_actual_convexity,row.c_frame_id,row.c_roll_type,row.c_roll_position,row.c_roll_material,row.c_crown_symbol,row.c_roughness,row.c_side_bearing,row.c_drive_bearing,row.c_pairing_roll,row.c_top_diameter,row.c_low_diameter];
-        // var c_roll_number = row.c_roll_number;
-        // var c_program_number = row.c_program_number;
-        // var
-        // list.push(c_id);
-        // list.push(c_frame_id)
-
-
-
-        result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"EditViewById('"+ list + "', view='view')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
+        // list = [ [0]ID , [1]轧辊号 ， [2]直径  ， [3]机架号 ，[4]轧辊类型 ，[5]轧辊位置 ，[6]轧辊材质 ， [7]凸度正负标记 ， [8]粗糙度， [9]操作侧轴承号 ， [10]驱动侧轴承号 ， [11]配对辊号 ， [12]锥形顶端直径 ， [13]锥形底端直径 ， [14]索引, [15]磨削原因， [16]探伤结果, [17]凸度值 ]
+        var list = [row.c_id,row.c_roll_number,row.c_diameter,row.c_frame_id,row.c_roll_type,row.c_roll_position,row.c_roll_material,row.c_crown_symbol,row.c_roughness,row.c_side_bearing,row.c_drive_bearing,row.c_pairing_roll,row.c_top_diameter,row.c_low_diameter,row.number,row.c_cause,row.c_result_detection,row.c_crown_value];
         result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"EditViewById('" + list + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
-        result += "<a href='javascript:;' class='btn btn-xs red' onclick=\"DeleteByIds('" + list + "')\" title='删除'><span class='glyphicon glyphicon-remove'></span></a>";
+        result += "<a href='javascript:;' class='btn btn-xs red' onclick=\"DeleteByIds('" + list + "')\" title='发送'><span class='glyphicon glyphicon-send'></span></a>";
         return result;
     }
 
     function EditViewById(data){
-        console.log(data)
+        console.log(data);
         if (typeof data == 'string')
         {
             console.log('字符串类型')
@@ -564,24 +604,36 @@
             console.log('列表类型')
             row = data;
         }
-
+        console.log('执行的数据'+row);
         // console.log(typeof(row[1]));
         // var row = $("tabledata").bootstrapTable('getData',false);
         $("#modal_c_id").val(row[0]);//数据库ID
         $("#modal_c_roll_number").val(row[1]);//轧辊编号
         $("#modal_c_diameter").val(row[2]);//直径
-        $("#modal_c_actual_convexity").val(row[3]);//凸度
-        $("#modal_c_frame_id").val(row[4]);//机架号
-        $("#modal_c_roll_type").val(row[5]);//轧辊类型
-        $("#modal_c_roll_position").val(row[6])//轧辊位置
-        $("#modal_c_roll_material").val(row[7])//轧辊材质
-        $("#modal_c_crown_symbol").val(row[8])//凸度正负标记
-        $("#modal_c_roughness").val(row[9])//粗糙度
-        $("#modal_c_side_bearing").val(row[10])//操作侧轴承号
-        $("#modal_c_drive_bearing").val(row[11])//驱动侧轴程号
-        $("#modal_c_pairing_roll").val(row[12])//配对辊号
-        $("#modal_c_top_diameter").val(row[13])//锥形顶端直径
-        $("#modal_c_low_diameter").val(row[14])//锥形底端直径
+        $("#modal_c_frame_id").val(row[3]);//机架号
+        $("#modal_c_roll_type").val(row[4]);//轧辊类型
+        $("#modal_c_roll_position").val(row[5]);//轧辊位置
+        $("#modal_c_roll_material").val(row[6]);//轧辊材质
+        $("#modal_c_crown_symbol").val(row[7]);//凸度正负标记
+        $("#modal_c_roughness").val(row[8]);//粗糙度
+        $("#modal_c_side_bearing").val(row[9]);//操作侧轴承号
+        $("#modal_c_drive_bearing").val(row[10]);//驱动侧轴程号
+        $("#modal_c_pairing_roll").val(row[11]);//配对辊号
+        $("#modal_c_top_diameter").val(row[12]);//锥形顶端直径
+        $("#modal_c_low_diameter").val(row[13]);//锥形底端直径
+        $("#modal_index").val(row[14]);//index
+        $("#modal_c_cause").val(row[15]);//磨削原因
+        $("#modal_c_result_detection").val(row[16]);//探伤结果
+
+        if (row[17]===null)
+        {
+            console.log(typeof row[17] +  row[17] + "空");
+            $("#modal_c_crown_value").val("0000");//凸度值
+        }else {
+            console.log(typeof row[17] +  row[17] + "非空");
+            $("#modal_c_crown_value").val(row[17]);//凸度值
+        }
+
         $("#myModal").modal();
     }
     // $('#delModal').on('show.bs.modal' , function (event)){
@@ -607,7 +659,7 @@
         var c_roll_position = $('#modal_c_roll_position').val();
         var c_roll_material = $('#modal_c_roll_material').val();
         var c_diameter = $('#modal_c_diameter').val();
-        var c_actual_convexity = $('#modal_c_actual_convexity').val();
+        var c_crown_value = $('#modal_c_crown_value').val();
         var c_crown_symbol = $('#modal_c_crown_symbol').val();
         var c_roughness = $('#modal_c_roughness').val();
         var c_side_bearing = $('#modal_c_side_bearing').val();
@@ -617,27 +669,31 @@
         var c_pairing_roll = $('#modal_c_pairing_roll').val();
         var c_top_diameter = $('#modal_c_top_diameter').val();
         var c_low_diameter = $('#modal_c_low_diameter').val();
+        var c_cause = $('#modal_c_cause').val();
+        var index = $('#modal_index').val();
+        var c_result_detection = $('#modal_c_result_detection').val();
         var data = {
             data : JSON.stringify({
-            'c_frame_id' : c_frame_id,
-            'c_roll_type' : c_roll_type,
-            'c_roll_position' : c_roll_position,
-            'c_roll_material' : c_roll_material,
-            'c_diameter' : c_diameter,
-            'c_actual_convexity' : c_actual_convexity,
-            'c_crown_symbol' : c_crown_symbol,
-            'c_roughness' : c_roughness,
-            'c_side_bearing' : c_side_bearing,
-            'c_drive_bearing' : c_drive_bearing,
-            'c_id' : c_id,
-            'c_roll_number' : c_roll_number,
-            'c_pairing_roll' : c_pairing_roll,
-            'c_top_diameter' : c_top_diameter,
-            'c_low_diameter' : c_low_diameter
+                'c_frame_id' : c_frame_id,
+                'c_roll_type' : c_roll_type,
+                'c_roll_position' : c_roll_position,
+                'c_roll_material' : c_roll_material,
+                'c_diameter' : c_diameter,
+                'c_crown_value' : c_crown_value,
+                'c_crown_symbol' : c_crown_symbol,
+                'c_roughness' : c_roughness,
+                'c_side_bearing' : c_side_bearing,
+                'c_drive_bearing' : c_drive_bearing,
+                'c_id' : c_id,
+                'c_roll_number' : c_roll_number,
+                'c_pairing_roll' : c_pairing_roll,
+                'c_top_diameter' : c_top_diameter,
+                'c_low_diameter' : c_low_diameter,
+                'c_cause': c_cause,
+                'c_result_detection': c_result_detection,
         })
         };
         console.log(data);
-
         //将编辑数据发送到后台
         $.ajax({
              type: "POST",
@@ -647,15 +703,54 @@
             success: function(res){
                 console.log(res);
                 console.log(0)
-                $.message({
-                    message:'保存成功',
-                    duration:'1000',
-                    center:true,
-                    type:'success'});
+                if (res['data'] === '修改成功'){
+                    $(function (){
+                        console.log('单行更新的index='+index);
+                        $('#tabledata').bootstrapTable('updateRow', {
+                            index: index-1,               //行索引
+                            row: {
+                                c_frame_id: c_frame_id,
+                                c_roll_type: c_roll_type,
+                                c_roll_position: c_roll_position,
+                                c_roll_material: c_roll_material,
+                                c_crown_symbol: c_crown_symbol,
+                                c_roughness: c_roughness,
+                                c_side_bearing: c_side_bearing,
+                                c_drive_bearing: c_drive_bearing,
+                                c_pairing_roll: c_pairing_roll,
+                                c_top_diameter:  c_top_diameter,
+                                c_low_diameter: c_low_diameter,
+                                c_cause: c_cause,
+                                c_result_detection: c_result_detection,
+                                c_crown_value:c_crown_value,
+                            }
+                        })
+                    })
+                    $.message({
+                        message:'保存成功',
+                        duration:'1000',
+                        center:true,
+                        type:'success'});
+                }else {
+                    $.message({
+                        message:'保存失败',
+                        duration:'1000',
+                        center:true,
+                        type:'error'});
+                }
+
                 },
             error: function (res){
                 console.log(res);
-                console.log(1)
+                console.log(1);
+                $.message({
+                    message:'服务器连接失败',
+                    type:'warning',
+                    duration:0,
+                    showClose:true,
+                    center:true,
+                    onClose:function(){alert('知道了')}
+    });
              },
 
          });
@@ -664,22 +759,58 @@
         // },3000);//300代表延迟毫秒值
 
     });
+    $('#send-btn').click(function (){
+        var c_frame_id= $('#modal_c_frame_id').val();
+        var data = {
+            data : JSON.stringify({
+            'c_frame_id' : c_frame_id,
+                })
+        };
+        $.ajax({
+             type: "POST",
+             url: "/send",
+             data: data,
+            dataType: "json",
+            success: function(res){
+                console.log(res);
+                console.log(0)
+                if (res['data'] === '发送成功'){
+                    $.message({
+                        message:'发送成功',
+                        duration:'1000',
+                        center:true,
+                        type:'success'});
+                }else {
+                    $.message({
+                        message:'发送失败',
+                        duration:'1000',
+                        center:true,
+                        type:'error'});
+                }
 
+                },
+            error: function (res){
+                console.log(res);
+                console.log(1);
+                $.message({
+                    message:'服务器连接失败',
+                    type:'warning',
+                    duration:0,
+                    showClose:true,
+                    center:true,
+                    onClose:function(){alert('知道了')}
+    });
+             },
 
-
+         });
+    });
 
     $(function(){
-
        $('#s_time').val(StartTime())
-
     });
     $(function(){
-
        $('#e_time').val(EndTime())
-
     });
-
-
 
 </script>
 </body>
