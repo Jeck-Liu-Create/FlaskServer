@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
+<!--    <meta name="viewport" content="width=device-width" />-->
     <title>磨床数据采集发送系统</title>
 <!--    @*1、Jquery组件引用*@-->
     <script src="../static/js/jquery-3.5.1.min.js"></script>
@@ -83,7 +84,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="modal_c_crown_value" class="col-sm-2 control-label">凸度直</label>
+                        <label for="modal_c_crown_value" class="col-sm-2 control-label">凸度值</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control"  id="modal_c_crown_value" value="0000">
                         </div>
@@ -365,7 +366,7 @@
         fixedColumns: true,
         fixedNumber: 2,
         pagination: true, //前端处理分页
-        singleSelect: false,//是否只能单选
+        singleSelect: false, //是否只能单选
         cache: true, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
         pageNumber: 1, //初始化加载第10页，默认第一页
         pageSize: 10, //每页的记录行数（*）
@@ -383,6 +384,10 @@
         showExport: true, //导出按钮
         exportDataType: "selected", //导出表格方式（默认basic：只导出当前页的表格数据；all：导出所有数据；selected：导出选中的数据）
         exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'], //导出文件类型
+        exportOptions: {
+            // 导出数据去除第一列出现"on"
+            ignoreColumn: [0,1,28,32,33,34]
+        },
 		columns: [{
             //#0 选择
                 checkbox: true,
@@ -409,11 +414,6 @@
                 title: '辊号',
                 align: 'center'
             }, {
-            //#5 配对轧辊号
-                field: 'c_pairing_roll',
-                title: '配对辊号',
-                align: 'center'
-            }, {
             //#6 轧辊位置
                 field: 'c_roll_position',
                 title: '轧辊位置',
@@ -435,9 +435,9 @@
                 align: 'center',
                 visible: true,
             }, {
-            //#10 曲度
+            //#10 曲线
                 field: 'c_curve',
-                title: '曲度',
+                title: '曲线',
                 align: 'center',
             }, {
             //#11 凸度值 c_crown_value
@@ -484,6 +484,11 @@
                 field: 'c_result_detection',
                 title: '探伤结果',
                 align: 'center',
+            }, {
+            //#5 配对轧辊号
+                field: 'c_pairing_roll',
+                title: '配对辊号',
+                align: 'center'
             }, {
             //#21 日期
                 field: 'c_date',
@@ -535,6 +540,7 @@
                 field: 'c_grinding_machine',
                 title: '磨床',
                 align: 'center',
+                visible: false
             }, {
             //#31 锥形顶端直径
                 field: 'c_top_diameter',
@@ -546,7 +552,7 @@
                 title: '锥形底端直径',
                 align: 'center',
             }, {
-            //#33 c_actual_convexity
+            //#33 实际凸度 c_actual_convexity
                 field: 'c_actual_convexity',
                 title: '实际凸度',
                 align: 'center',
@@ -555,11 +561,13 @@
                 field: 'c_shift',
                 title: '班次',
                 align: 'center',
+                visible: false
             }, {
             //#35 程序号c_program_number
                 field: 'c_shift',
                 title: '程序号',
                 align: 'center',
+                visible: false
             }, {
             //#36
                 field: 'c_id',
