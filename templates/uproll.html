@@ -43,8 +43,8 @@
           <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse" >
               <ul class="nav navbar-nav" style="padding-top: 4px; padding-bottom: 10px; height: 28px;">
                 <li><a href="from.html">磨削记录</a> </li>
-                <li class="active"><a href="index.html">卸辊记录</a> </li>
-                <li><a href="uproll.html">装辊记录</a> </li>
+                <li><a href="index.html">卸辊记录</a> </li>
+                <li class="active"><a href="uproll.html">装辊记录</a> </li>
                 <li><a href="supplement.html">补录</a></li>
                 <li><a href="contact.html">Contact</a> </li>
               </ul>
@@ -195,7 +195,7 @@
             ROLL_NM = str;
         }
 	    $('#tabledata').bootstrapTable({
-        url:'/reload_index',
+        url:'/reload_uproll',
         queryParams : function(params) {
 				return {
 					limit: params.limit,
@@ -233,7 +233,7 @@
         exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'], //导出文件类型
         exportOptions: {
             // 导出数据去除第一列出现"on"
-            ignoreColumn: [0,13]
+            ignoreColumn: [0,7]
         },
 		columns: [{
             //#0 选择
@@ -270,38 +270,7 @@
                 title: '卸辊组号',
                 align: 'center',
             }, {
-            //#7 运行时长
-                field: 'c_running_time',
-                title: '运行时长',
-                align: 'center',
-            }, {
-            //#8 轧制总长度
-                field: 'c_rolling_length',
-                title: '轧制总长度',
-                align: 'center',
-                visible: true,
-            }, {
-            //#9 轧制总重量
-                field: 'c_rolling_weight',
-                title: '轧制总重量',
-                align: 'center',
-            }, {
-            //#10 '轧制备注
-                field: 'c_product_remark',
-                title: '轧制备注',
-                align: 'center',
-            }, {
-            //#11 轧制原因代码
-                field: 'c_change_reason',
-                title: '轧制原因代码',
-                align: 'center',
-            }, {
-            //#12 轧制事故代号
-                field: 'c_accident_coil_No',
-                title: '轧制事故代号',
-                align: 'center',
-            }, {
-            //#13 ID
+            //#7 ID
                 field: 'id',
                 title: 'ID',
                 align: 'center',

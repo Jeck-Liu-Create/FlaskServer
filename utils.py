@@ -13,12 +13,17 @@
 # import lib
 class Change:
     # 将ajax返回的时间类型数据转化为datetime类型字符串
-    def __init__(self,data):
-        self.data = data;
+    def __init__(self,data,data_to=None):
+        self.data = data
+        self.data_to =data_to
     def ChangeTime(self):
         str = self.data.replace('T',' ')
         print(str)
         return  str
+    # 将时间数据转日期数据
+    def ChangeDate(self):
+        datestr = (self.ChangeTime())[0:10]
+        return datestr
 
     # 将返回的磨床编号下拉框中的数据转为字符串
     def GetROLL(self):
@@ -31,5 +36,12 @@ class Change:
             return str
         else:
             return self
+    def Amount(self):
+        if self.data is None:
+            return None
+        else:
+            return float('%.5f' % (float(self.data) - float(self.data_to)))
+
+
 if  __name__ == '__main__':
     ch = Change('0号磨床(HIECISE-MK84160)').GetROLL()
