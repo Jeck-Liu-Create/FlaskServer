@@ -34,11 +34,11 @@ class DateEncoder(json.JSONEncoder):
         else:
             return json.JSONEncoder.default(self,obj)
 app = Flask(__name__)
-# one=TCPclient()
-# clinet_thread = threading.Thread(target=one.tcp_client)
-# heardbeat_thread = threading.Thread(target=one.add_heartbeat)
-# clinet_thread.start()
-# heardbeat_thread.start()
+one=TCPclient()
+clinet_thread = threading.Thread(target=one.tcp_client)
+heardbeat_thread = threading.Thread(target=one.add_heartbeat)
+clinet_thread.start()
+heardbeat_thread.start()
 
 
 @app.route('/')         #设置路由
@@ -220,6 +220,10 @@ def f_infor_uproll():
 def f_infor_supplement():
     return render_template('supplement.html')
 
+@app.route('/send_record.html') #页面链接该路由名称
+def f_infor_send_record():
+    return render_template('send_record.html')
+
 #依照时间和磨床查找table数据
 def infodata_index(sql):
     con = mysql.connect(user='root', password='Data123..', db="serverxp")
@@ -319,7 +323,6 @@ def reload_index():
     print("reload查询"+sqltxt)
     return infodata_index(sqltxt)
     # print(infodata(sqltxt,txt))
-
 
 #依照时间和磨床查找table数据
 def infodata_uproll(sql):
@@ -586,6 +589,93 @@ def delete_id():
     else:
         return json_redistr
 
+#依照发送时间和磨床查找table数据
+def info_send_data(sql):
+    con = mysql.connect(user='root', password='Data123..', db="test")
+    con.autocommit(True)
+    cur = con.cursor()
+    try:
+        cur.execute(sql)
+
+    except Exception:
+        con.rollback()
+        print("搜索失败")
+    finally:
+        data = cur.fetchall()
+        cur.close()
+        con.close()
+        if data:
+            # 元组非空
+            datalist = list(data)
+            print(datalist)
+            for c in datalist:
+                datalist[datalist.index(c)] = list(c)
+            print(datalist)
+            data = []
+            a = 0
+            for i in range(0, len(datalist)):
+                # print(len(datalist))
+                print(a)
+                a += 1
+                d = {"id": datalist[i][0],"send_time": (datalist[i][1]).strftime("%Y-%m-%d %H:%M:%S"),"c_id": datalist[i][2], "c_roll_number": datalist[i][3], "c_program_number": datalist[i][4],
+                     "c_operator": datalist[i][5], "c_shift": datalist[i][6], "c_curve": datalist[i][7],
+                     "c_diameter": datalist[i][8], "c_diameter_before": datalist[i][9], "c_error": datalist[i][10],
+                     "c_coaxiality": datalist[i][11], "c_cylindricity": datalist[i][12], "c_roundness": datalist[i][13],
+                     "c_wheel_diameter": datalist[i][14], "c_actual_convexity": datalist[i][15],
+                     "c_start_time": (datalist[i][16]).strftime("%Y-%m-%d %H:%M:%S"),
+                     "c_end_time": (datalist[i][17]).strftime("%Y-%m-%d %H:%M:%S"), "c_grinding_machine": datalist[i][18],
+                     "c_date": (datalist[i][19]).strftime("%Y-%m-%d"),"c_frame_id": datalist[i][20],"c_roll_type": datalist[i][21],
+                     "c_roll_position": datalist[i][22],"c_roll_material": datalist[i][23],"c_crown_symbol": datalist[i][24],
+                     "c_roughness": datalist[i][25],"c_side_bearing": datalist[i][26],"c_drive_bearing": datalist[i][27],
+                     "c_pairing_roll": datalist[i][28],"c_top_diameter": datalist[i][29],"c_low_diameter": datalist[i][30], "number":a,
+                     "c_grinding_amount": Change( datalist[i][9],data_to=datalist[i][8]).Amount(), "c_cause": datalist[i][31],
+                     "c_result_detection": datalist[i][32], "c_crown_value": datalist[i][33]}
+                data.append(d)
+                print(d)
+
+            if request.method == 'POST':
+                print('post')
+            if request.method == 'GET':
+                info = request.values
+                limit = info.get('limit', 10)  # 每页显示的条数
+                offset = info.get('offset', 0)  # 分片数，(页码-1)*limit，它表示一段数据的起点
+                print('get', limit)
+                print('get  offset', offset)
+                print(len(data))
+                print(data[int(offset):(int(offset) + int(limit))])
+                print(len(data[int(offset):(int(offset) + int(limit))]))
+                return jsonify({'total': len(data), 'rows': data[int(offset):(int(offset) + int(limit))]})
+        else:
+            data = {"data":'未搜索到数据'}
+            print(data)
+            return data
+
+@app.route('/reload_send_data', methods=["GET","POST"])
+def reload_send_data():
+    global StartTime, EndTime, ROLL, ROLLNM
+    print('执行成功')
+    if request.method == 'POST':
+        ROLL = request.form.get('ROLL')
+        StartTime = request.form.get('StartTime')
+        EndTime = request.form.get('EndTime')
+        ROLLNM = request.form.get('ROLLNM')
+    if request.method == 'GET':
+        ROLL = request.args.get('ROLL')
+        StartTime = request.args.get('StartTime')
+        EndTime = request.args.get('EndTime')
+        ROLLNM = request.args.get('ROLLNM')
+        print(ROLL + StartTime + EndTime + ROLLNM)
+    # print(ROLL+StartTime+EndTime)
+    StartTime = Change(StartTime).ChangeTime()
+    EndTime = Change(EndTime).ChangeTime()
+    ROLL = Change(ROLL).GetROLL()
+    # print("Search="+ROLLNM+type(ROLLNM))
+    if (ROLLNM=='null'):
+        sqltxt = r"select * from send_succeed where send_time >= '%s' and send_time <= '%s' and c_grinding_machine ='%s' ORDER BY c_id desc;"%(StartTime,EndTime,ROLL)
+    else:
+        sqltxt = r"select * from send_succeed where send_time >= '%s' and send_time <= '%s' and c_roll_number ='%s' ORDER BY c_id desc;"%(StartTime,EndTime,ROLLNM)
+    print("reload查询"+sqltxt)
+    return info_send_data(sqltxt)
 
 if __name__ == "__main__":
     app.run(port=5000,host='0.0.0.0')
