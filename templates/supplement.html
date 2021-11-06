@@ -417,7 +417,6 @@
          <span id="exportToolbar" style="display: inline-block" class="btn-group">
              <select id="sel_exportoption" class="form-control">
                  <option value="">导出当前页数据</option>
-                 <option value="all">导出全部数据</option>
                  <option value="selected">导出选中数据</option>
              </select>
          </span>
@@ -428,6 +427,12 @@
 
 
 <script type="text/javascript">
+    $("#sel_exportoption").change(function () {
+        //刷新参数设置
+        $('#tabledata').bootstrapTable('refreshOptions', {
+            exportDataType: $(this).val()
+        });
+    });
 
 //返回开始时间
     function StartTime()
@@ -555,7 +560,7 @@
        // queryParamsType:'limit',
         sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
         showExport: true, //导出按钮
-        exportDataType: "selected", //导出表格方式（默认basic：只导出当前页的表格数据；all：导出所有数据；selected：导出选中的数据）
+        exportDataType: "basic", //导出表格方式（默认basic：只导出当前页的表格数据；all：导出所有数据；selected：导出选中的数据）
         exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'], //导出文件类型
         exportOptions: {
             // 导出数据去除第一列出现"on"
