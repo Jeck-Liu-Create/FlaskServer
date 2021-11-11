@@ -68,15 +68,15 @@ def infodata(sql):
         if data:
             # 元组非空
             datalist = list(data)
-            print(datalist)
+            # print(datalist)
             for c in datalist:
                 datalist[datalist.index(c)] = list(c)
-            print(datalist)
+            # print(datalist)
             data = []
             a = 0
             for i in range(0, len(datalist)):
                 # print(len(datalist))
-                print(a)
+                # print(a)
                 a += 1
                 d = {"c_id": datalist[i][0], "c_roll_number": datalist[i][1], "c_program_number": datalist[i][2],
                      "c_operator": datalist[i][3], "c_shift": datalist[i][4], "c_curve": datalist[i][5],
@@ -92,7 +92,7 @@ def infodata(sql):
                      "c_grinding_amount": Change( datalist[i][7],data_to=datalist[i][6]).Amount(), "c_cause": datalist[i][29],
                      "c_result_detection": datalist[i][30], "c_crown_value": datalist[i][31]}
                 data.append(d)
-                print(d)
+                # print(d)
 
             if request.method == 'POST':
                 print('post')
@@ -100,11 +100,11 @@ def infodata(sql):
                 info = request.values
                 limit = info.get('limit', 10)  # 每页显示的条数
                 offset = info.get('offset', 0)  # 分片数，(页码-1)*limit，它表示一段数据的起点
-                print('get', limit)
-                print('get  offset', offset)
-                print(len(data))
-                print(data[int(offset):(int(offset) + int(limit))])
-                print(len(data[int(offset):(int(offset) + int(limit))]))
+                # print('get', limit)
+                # print('get  offset', offset)
+                # print(len(data))
+                # print(data[int(offset):(int(offset) + int(limit))])
+                # print(len(data[int(offset):(int(offset) + int(limit))]))
                 # print(jsonify({'total': len(data), 'rows': data[int(offset):(int(offset) + int(limit))]}))
                 return jsonify({'total': len(data), 'rows': data[int(offset):(int(offset) + int(limit))]})
                 # 注意total与rows是必须的两个参数，名字不能写错，total是数据的总长度，rows是每页要显示的数据,它是一个列表
@@ -191,7 +191,7 @@ def reload():
 @app.route('/send', methods=["GET","POST"])
 def send():
     data = json.loads(request.form.get('data'))
-    print(data)
+    # print(data)
     senddata = data['c_id']
     senddata = senddata.zfill(9)
     databytes = bytes(50)
@@ -242,15 +242,15 @@ def infodata_index(sql):
         if data:
             # 元组非空
             datalist = list(data)
-            print(datalist)
+            # print(datalist)
             for c in datalist:
                 datalist[datalist.index(c)] = list(c)
-            print(datalist)
+            # print(datalist)
             data = []
             a = 0
             for i in range(0, len(datalist)):
                 # print(len(datalist))
-                print(a)
+                # print(a)
                 a += 1
                 d = {"c_frame_id": datalist[i][0], "c_roll_type": datalist[i][1], "c_roll_number": datalist[i][2],
                      "c_down_time": (datalist[i][3].strftime("%Y-%m-%d %H:%M:%S")), "c_down_cless": datalist[i][4], "c_down_set": datalist[i][5],
@@ -258,7 +258,7 @@ def infodata_index(sql):
                      "c_product_remark": datalist[i][9], "c_change_reason": datalist[i][10], "c_accident_coil_No ": datalist[i][11],
                      "id": datalist[i][12]}
                 data.append(d)
-                print(d)
+                # print(d)
 
             if request.method == 'POST':
                 print('post')
@@ -266,11 +266,11 @@ def infodata_index(sql):
                 info = request.values
                 limit = info.get('limit', 10)  # 每页显示的条数
                 offset = info.get('offset', 0)  # 分片数，(页码-1)*limit，它表示一段数据的起点
-                print('get', limit)
-                print('get  offset', offset)
-                print(len(data))
-                print(data[int(offset):(int(offset) + int(limit))])
-                print(len(data[int(offset):(int(offset) + int(limit))]))
+                # print('get', limit)
+                # print('get  offset', offset)
+                # print(len(data))
+                # print(data[int(offset):(int(offset) + int(limit))])
+                # print(len(data[int(offset):(int(offset) + int(limit))]))
                 # print(jsonify({'total': len(data), 'rows': data[int(offset):(int(offset) + int(limit))]}))
                 return jsonify({'total': len(data), 'rows': data[int(offset):(int(offset) + int(limit))]})
                 # 注意total与rows是必须的两个参数，名字不能写错，total是数据的总长度，rows是每页要显示的数据,它是一个列表
@@ -342,21 +342,21 @@ def infodata_uproll(sql):
         if data:
             # 元组非空
             datalist = list(data)
-            print(datalist)
+            # print(datalist)
             for c in datalist:
                 datalist[datalist.index(c)] = list(c)
-            print(datalist)
+            # print(datalist)
             data = []
             a = 0
             for i in range(0, len(datalist)):
                 # print(len(datalist))
-                print(a)
+                # print(a)
                 a += 1
                 d = {"c_frame_id": datalist[i][0], "c_roll_type": datalist[i][1], "c_roll_number": datalist[i][2],
                      "c_down_time": (datalist[i][3].strftime("%Y-%m-%d %H:%M:%S")), "c_down_cless": datalist[i][4], "c_down_set": datalist[i][5],
                      "id": datalist[i][6]}
                 data.append(d)
-                print(d)
+                # print(d)
 
             if request.method == 'POST':
                 print('post')
@@ -364,11 +364,11 @@ def infodata_uproll(sql):
                 info = request.values
                 limit = info.get('limit', 10)  # 每页显示的条数
                 offset = info.get('offset', 0)  # 分片数，(页码-1)*limit，它表示一段数据的起点
-                print('get', limit)
-                print('get  offset', offset)
-                print(len(data))
-                print(data[int(offset):(int(offset) + int(limit))])
-                print(len(data[int(offset):(int(offset) + int(limit))]))
+                # print('get', limit)
+                # print('get  offset', offset)
+                # print(len(data))
+                # print(data[int(offset):(int(offset) + int(limit))])
+                # print(len(data[int(offset):(int(offset) + int(limit))]))
                 # print(jsonify({'total': len(data), 'rows': data[int(offset):(int(offset) + int(limit))]}))
                 return jsonify({'total': len(data), 'rows': data[int(offset):(int(offset) + int(limit))]})
                 # 注意total与rows是必须的两个参数，名字不能写错，total是数据的总长度，rows是每页要显示的数据,它是一个列表
@@ -607,15 +607,11 @@ def info_send_data(sql):
         if data:
             # 元组非空
             datalist = list(data)
-            print(datalist)
             for c in datalist:
                 datalist[datalist.index(c)] = list(c)
-            print(datalist)
             data = []
             a = 0
             for i in range(0, len(datalist)):
-                # print(len(datalist))
-                print(a)
                 a += 1
                 d = {"id": datalist[i][0],"send_time": (datalist[i][1]).strftime("%Y-%m-%d %H:%M:%S"),"c_id": datalist[i][2], "c_roll_number": datalist[i][3], "c_program_number": datalist[i][4],
                      "c_operator": datalist[i][5], "c_shift": datalist[i][6], "c_curve": datalist[i][7],
@@ -631,19 +627,18 @@ def info_send_data(sql):
                      "c_grinding_amount": Change( datalist[i][9],data_to=datalist[i][8]).Amount(), "c_cause": datalist[i][31],
                      "c_result_detection": datalist[i][32], "c_crown_value": datalist[i][33]}
                 data.append(d)
-                print(d)
 
-            if request.method == 'POST':
-                print('post')
+            # if request.method == 'POST':
+            #     print('post')
             if request.method == 'GET':
                 info = request.values
                 limit = info.get('limit', 10)  # 每页显示的条数
                 offset = info.get('offset', 0)  # 分片数，(页码-1)*limit，它表示一段数据的起点
-                print('get', limit)
-                print('get  offset', offset)
-                print(len(data))
-                print(data[int(offset):(int(offset) + int(limit))])
-                print(len(data[int(offset):(int(offset) + int(limit))]))
+                # print('get', limit)
+                # print('get  offset', offset)
+                # print(len(data))
+                # print(data[int(offset):(int(offset) + int(limit))])
+                # print(len(data[int(offset):(int(offset) + int(limit))]))
                 return jsonify({'total': len(data), 'rows': data[int(offset):(int(offset) + int(limit))]})
         else:
             data = {"data":'未搜索到数据'}

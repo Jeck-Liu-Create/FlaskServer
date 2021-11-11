@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
 <!--    <meta name="viewport" content="width=device-width" />-->
-    <title>磨床数据采集发送系统</title>
+    <title>磨削记录磨-床数据采集发送系统</title>
+    <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon"/>
 <!--    @*1、Jquery组件引用*@-->
     <script src="../static/js/jquery-3.5.1.min.js"></script>
     <script src="../static/js/message.js"></script>
@@ -85,7 +86,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="modal_c_crown_value" class="col-sm-2 control-label">凸度值</label>
+                        <label for="modal_c_crown_value" class="col-sm-2 control-label">凸度值(4位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control"  id="modal_c_crown_value" value="0000">
                         </div>
@@ -99,7 +100,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="modal_c_roughness" class="col-sm-2 control-label">粗糙度</label>
+                        <label for="modal_c_roughness" class="col-sm-2 control-label">粗糙度(3位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control"  id="modal_c_roughness">
                         </div>
@@ -109,11 +110,11 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="modal_c_side_bearing" class="col-sm-2 control-label">操作侧轴承号</label>
+                        <label for="modal_c_side_bearing" class="col-sm-2 control-label">操作侧轴承号(8位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="modal_c_side_bearing">
                         </div>
-                        <label for="modal_c_drive_bearing" class="col-sm-2 control-label">驱动侧轴承号</label>
+                        <label for="modal_c_drive_bearing" class="col-sm-2 control-label">驱动侧轴承号(8位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="modal_c_drive_bearing">
                         </div>
@@ -125,17 +126,17 @@
                         <div class="col-sm-3">
                             <input type="text" class="form-control" disabled="disabled" id="modal_c_roll_number">
                         </div>
-                        <label for="modal_c_pairing_roll" class="col-sm-2 control-label">配对辊号</label>
+                        <label for="modal_c_pairing_roll" class="col-sm-2 control-label">配对辊号(10位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="modal_c_pairing_roll">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="modal_c_top_diameter" class="col-sm-2 control-label">锥形顶端直径</label>
+                        <label for="modal_c_top_diameter" class="col-sm-2 control-label">锥形顶端直径(7位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="modal_c_top_diameter">
                         </div>
-                        <label for="modal_c_low_diameter" class="col-sm-2 control-label">锥形底端直径</label>
+                        <label for="modal_c_low_diameter" class="col-sm-2 control-label">锥形底端直径(7位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="modal_c_low_diameter">
                         </div>
@@ -160,7 +161,7 @@
                         </div>
                         <label for="modal_c_result_detection" class="col-sm-2 control-label">探伤结果</label>
                         <div class="col-sm-3">
-                            <textarea  type="text" class="form-control" id="modal_c_result_detection"></textarea >
+                            <textarea  type="text"  class="form-control" id="modal_c_result_detection"></textarea >
                         </div>
                     </div>
                 </form>
@@ -479,91 +480,91 @@
                 title: '探伤结果',
                 align: 'center',
             }, {
-            //#5 配对轧辊号
+            //#21 配对轧辊号
                 field: 'c_pairing_roll',
                 title: '配对辊号',
                 align: 'center'
             }, {
-            //#21 日期
+            //#22 日期
                 field: 'c_date',
                 title: '日期',
                 align: 'center',
             }, {
-            //#22 操作者
+            //#23 操作者
                 field: 'c_operator',
                 title: '操作者',
                 align: 'center',
                 visible: true,
             }, {
-            //#23 砂轮直径
+            //#24 砂轮直径
                 field: 'c_wheel_diameter',
                 title: '砂轮直径',
                 align: 'center',
             }, {
-            //#24 轧辊材质
+            //#25 轧辊材质
                 field: 'c_roll_material',
                 title: '轧辊材质',
                 align: 'center',
             }, {
-            //#25 轧辊类型
+            //#26 轧辊类型
                 field: 'c_roll_type',
                 title: '轧辊类型',
                 align: 'center',
             }, {
-            //#26 驱动侧轴承号
+            //#27 驱动侧轴承号
                 field: 'c_drive_bearing',
                 title: '驱动侧轴承号',
                 align: 'center',
             }, {
-            //#27 操作侧轴承号
+            //#28 操作侧轴承号
                 field: 'c_side_bearing',
                 title: '操作侧轴承号',
                 align: 'center',
             }, {
-            //#28 开始时间
+            //#29 开始时间
                 field: 'c_start_time',
                 title: '开始时间',
                 align: 'center',
             }, {
-            //#29 结束时间
+            //#30 结束时间
                 field: 'c_end_time',
                 title: '结束时间',
                 align: 'center',
             }, {
-            //#30 磨床
+            //#31 磨床
                 field: 'c_grinding_machine',
                 title: '磨床',
                 align: 'center',
                 visible: false
             }, {
-            //#31 锥形顶端直径
+            //#32 锥形顶端直径
                 field: 'c_top_diameter',
                 title: '锥形顶端直径',
                 align: 'center',
             }, {
-            //#32 锥形底端直径
+            //#33 锥形底端直径
                 field: 'c_low_diameter',
                 title: '锥形底端直径',
                 align: 'center',
             }, {
-            //#33 实际凸度 c_actual_convexity
+            //#34 实际凸度 c_actual_convexity
                 field: 'c_actual_convexity',
                 title: '实际凸度',
                 align: 'center',
             }, {
-            //#34 班次c_shift
+            //#35 班次c_shift
                 field: 'c_shift',
                 title: '班次',
                 align: 'center',
                 visible: false
             }, {
-            //#35 程序号c_program_number
+            //#36 程序号c_program_number
                 field: 'c_shift',
                 title: '程序号',
                 align: 'center',
                 visible: false
             }, {
-            //#36
+            //#37
                 field: 'c_id',
                 title: 'ID',
                 visible:false,
@@ -614,17 +615,62 @@
         $("#modal_c_frame_id").val(row[3]);//机架号
         $("#modal_c_roll_type").val(row[4]);//轧辊类型
         $("#modal_c_roll_position").val(row[5]);//轧辊位置
-        $("#modal_c_roll_material").val(row[6]);//轧辊材质
-        $("#modal_c_crown_symbol").val(row[7]);//凸度正负标记
+        // $("#modal_c_roll_material").val(row[6]);//轧辊材质
+        if (row[6]===null || row[6]==='')
+        {
+            console.log(typeof row[6] +  row[6] + "空");
+            $("#modal_c_roll_material").val("05:MC5");//凸度值
+        }else {
+            console.log(typeof row[6] +  row[6] + "非空");
+            $("#modal_c_roll_material").val(row[6]);//凸度值
+        }
+
+        // $("#modal_c_crown_symbol").val(row[7]);//凸度正负标记
+        if (row[7]===null || row[7]==='')
+        {
+            console.log(typeof row[7] +  row[7] + "空");
+            $("#modal_c_crown_symbol").val("2:正");//凸度值
+        }else {
+            console.log(typeof row[7] +  row[7] + "非空");
+            $("#modal_c_crown_symbol").val(row[7]);//凸度值
+        }
+
         $("#modal_c_roughness").val(row[8]);//粗糙度
         $("#modal_c_side_bearing").val(row[9]);//操作侧轴承号
         $("#modal_c_drive_bearing").val(row[10]);//驱动侧轴程号
         $("#modal_c_pairing_roll").val(row[11]);//配对辊号
-        $("#modal_c_top_diameter").val(row[12]);//锥形顶端直径
-        $("#modal_c_low_diameter").val(row[13]);//锥形底端直径
+        // $("#modal_c_top_diameter").val(row[12]);//锥形顶端直径
+        if (row[12]===null || row[12]==='')
+        {
+            console.log(typeof row[12] +  row[12] + "空");
+            $("#modal_c_top_diameter").val("0000000");//凸度值
+        }else {
+            console.log(typeof row[12] +  row[12] + "非空");
+            $("#modal_c_top_diameter").val(row[12]);//凸度值
+        }
+
+        // $("#modal_c_low_diameter").val(row[13]);//锥形底端直径
+        if (row[13]===null || row[13]==='')
+        {
+            console.log(typeof row[13] +  row[13] + "空");
+            $("#modal_c_low_diameter").val("0000000");//凸度值
+        }else {
+            console.log(typeof row[13] +  row[13] + "非空");
+            $("#modal_c_low_diameter").val(row[13]);//凸度值
+        }
+
         $("#modal_index").val(row[14]);//index
         $("#modal_c_cause").val(row[15]);//磨削原因
-        $("#modal_c_result_detection").val(row[16]);//探伤结果
+        // $("#modal_c_result_detection").val(row[16]);//探伤结果
+        if (row[16]===null || row[16]==='')
+        {
+            console.log(typeof row[16] +  row[16] + "空");
+            $("#modal_c_result_detection").val("裂纹探伤结果：\n软点探伤结果：");//凸度值
+        }else {
+            console.log(typeof row[16] +  row[16] + "非空");
+            $("#modal_c_result_detection").val(row[16]);//凸度值
+        }
+
 
         if (row[17]===null || row[17]==='')
         {
@@ -658,28 +704,31 @@
     $(function (){updata()})
     //搜索按钮
     $('#send').click(function(){
-        var s_time = $('#s_time').val();
-        s_time = s_time.replace("T"," ")
-        var e_time = $('#e_time').val();
-        e_time = e_time.replace("T"," ")
-        console.log(s_time)
-        console.log(e_time)
+        // var s_time = $('#s_time').val();
+        // s_time = s_time.replace("T"," ")
+        // var e_time = $('#e_time').val();
+        // e_time = e_time.replace("T"," ")
+        // console.log(s_time)
+        // console.log(e_time)
+        //
+        // var day1 = new Date(s_time);
+        // var day2 = new Date(e_time);
+        //
+        // var difference = (day2 - day1) / (1000 * 60 * 60 * 24)
+        // console.log(difference)
+        // console.log('搜索');
+        // if (difference <= 180 && difference > 0){
+        //     $("#tabledata").bootstrapTable('destroy');
+        //
+        //     updata();
+        // }else if (difference > 180){
+        //     alert("要求搜索时间范围不超过180天")
+        // }else if (difference < 0){
+        //     alert("开始时间需要小于结束时间")
+        // }
+        $("#tabledata").bootstrapTable('destroy');
 
-        var day1 = new Date(s_time);
-        var day2 = new Date(e_time);
-
-        var difference = (day2 - day1) / (1000 * 60 * 60 * 24)
-        console.log(difference)
-        console.log('搜索');
-        if (difference <= 180 && difference > 0){
-            $("#tabledata").bootstrapTable('destroy');
-
-            updata();
-        }else if (difference > 180){
-            alert("要求搜索时间范围不超过180天")
-        }else if (difference < 0){
-            alert("开始时间需要小于结束时间")
-        }
+        updata();
 
     });
 
@@ -943,7 +992,7 @@
         // 1.获取操作侧轴承箱号
         var c_crown = $("#modal_c_side_bearing").val();
         // 2.定义校验正则
-        var reg_c_crown = /^\d{8}$/
+        var reg_c_crown = /^[A-Za-z0-9\\-]{8}$/
         // 3.判断是否满足校验要求，并给出提示信息
         var flag = reg_c_crown.test(c_crown);
         if (flag) {
@@ -962,7 +1011,7 @@
         // 1.获取驱动侧轴承箱号
         var c_crown = $("#modal_c_drive_bearing").val();
         // 2.定义校验正则
-        var reg_c_crown = /^\d{8}$/
+        var reg_c_crown = /^[A-Za-z0-9\\-]{8}$/
         // 3.判断是否满足校验要求，并给出提示信息
         var flag = reg_c_crown.test(c_crown);
         if (flag) {
