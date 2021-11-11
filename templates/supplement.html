@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
 <!--    <meta name="viewport" content="width=device-width" />-->
-    <title>磨床数据采集发送系统</title>
+    <title>补录-床数据采集发送系统</title>
+    <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon"/>
 <!--    @*1、Jquery组件引用*@-->
     <script src="../static/js/jquery-3.5.1.min.js"></script>
     <script src="../static/js/message.js"></script>
@@ -184,7 +185,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel_add">编辑轧辊数据</h4>
+                <h4 class="modal-title" id="myModalLabel_add">补录轧辊数据</h4>
             </div>
             <div class="modal-body">
                 <form action="" class="form-horizontal">
@@ -920,28 +921,31 @@
 
     // 搜索按钮
     $('#send').click(function(){
-        var s_time = $('#s_time').val();
-        s_time = s_time.replace("T"," ")
-        var e_time = $('#e_time').val();
-        e_time = e_time.replace("T"," ")
-        console.log(s_time)
-        console.log(e_time)
+        // var s_time = $('#s_time').val();
+        // s_time = s_time.replace("T"," ")
+        // var e_time = $('#e_time').val();
+        // e_time = e_time.replace("T"," ")
+        // console.log(s_time)
+        // console.log(e_time)
+        //
+        // var day1 = new Date(s_time);
+        // var day2 = new Date(e_time);
+        //
+        // var difference = (day2 - day1) / (1000 * 60 * 60 * 24)
+        // console.log(difference)
+        // console.log('搜索');
+        // if (difference <= 180 && difference > 0){
+        //     $("#tabledata").bootstrapTable('destroy');
+        //
+        //     updata();
+        // }else if (difference > 180){
+        //     alert("要求搜索时间范围不超过180天")
+        // }else if (difference < 0){
+        //     alert("开始时间需要小于结束时间")
+        // }
+        $("#tabledata").bootstrapTable('destroy');
 
-        var day1 = new Date(s_time);
-        var day2 = new Date(e_time);
-
-        var difference = (day2 - day1) / (1000 * 60 * 60 * 24)
-        console.log(difference)
-        console.log('搜索');
-        if (difference <= 180 && difference > 0){
-            $("#tabledata").bootstrapTable('destroy');
-
-            updata();
-        }else if (difference > 180){
-            alert("要求搜索时间范围不超过180天")
-        }else if (difference < 0){
-            alert("开始时间需要小于结束时间")
-        }
+        updata();
 
     });
 
