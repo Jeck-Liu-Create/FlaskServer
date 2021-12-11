@@ -1596,7 +1596,7 @@
         var c_crown = $("#modal_c_diameter_before_add").val();
         // 2.定义校验正则
         // var reg_username = /^[0-9]{4}$/;
-        var reg_c_crown = /^[0-9]{3}.[0-9]{3}$/
+        var reg_c_crown = /^[0-9]{3,4}.[0-9]{3}$/
         // 3.判断是否满足校验要求，并给出提示信息
         var flag = reg_c_crown.test(c_crown);
         if (flag) {
@@ -1616,7 +1616,7 @@
         var c_crown = $("#modal_c_diameter_add").val();
         // 2.定义校验正则
         // var reg_username = /^[0-9]{4}$/;
-        var reg_c_crown = /^[0-9]{3}.[0-9]{3}$/
+        var reg_c_crown = /^[0-9]{3,4}.[0-9]{3}$/
         // 3.判断是否满足校验要求，并给出提示信息
         var flag = reg_c_crown.test(c_crown);
         if (flag) {

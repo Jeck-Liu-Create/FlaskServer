@@ -134,7 +134,41 @@ def edit():
     c_cause = data['c_cause']                   #c_cause            磨削原因
     c_result_detection = data['c_result_detection']            #c_result_detection 探伤结果
     c_crown_value = data['c_crown_value']                      #c_crown_value      凸度值
+    c_diameter = data['c_diameter']             #c_diameter         直径
     sqltxt = r"update grinder_data set c_frame_id = '%s', c_roll_type = '%s', c_roll_position = '%s', c_roll_material = '%s', c_crown_symbol = '%s', c_roughness = '%s', c_side_bearing = '%s', c_drive_bearing = '%s', c_pairing_roll = '%s', c_top_diameter = '%s', c_low_diameter = '%s', c_cause = '%s' ,c_result_detection = '%s', c_crown_value = '%s' where c_id = '%s'  LIMIT 1 ;" % (c_frame_id, c_roll_type, c_roll_position, c_roll_material,  c_crown_symbol, c_roughness, c_side_bearing, c_drive_bearing, c_pairing_roll, c_top_diameter, c_low_diameter,  c_cause, c_result_detection ,c_crown_value ,c_id)
+    print('更新操作SQL = '+sqltxt)
+    restr = {"data": '修改成功',}
+    json_restr = json.dumps(restr)
+    redistr = {"data": '修改失败',}
+    json_redistr = json.dumps(redistr)
+    try:
+        con = mysql.connect(user='root', password='Data123..', db="test")
+        con.autocommit(True)
+        cur = con.cursor()
+        try:
+            cur.execute(sqltxt)
+            return json_restr
+        except Exception:
+            con.rollback()
+            return json_redistr
+        finally:
+            cur.close()
+            con.close()
+            print('更新执行成功')
+    except:
+        print('更新执行失败')
+        return json_redistr
+
+# 竖辊数据编辑
+@app.route('/editnone', methods=["GET","POST"])
+def editnone():
+    data = json.loads(request.form.get('data'))
+    print(data)
+    c_id = data['c_id_none']                                         #c_id               作为主键
+    c_cause = data['c_cause_none']                                   #c_cause            磨削原因
+    c_result_detection = data['c_result_detection_none']             #c_result_detection 探伤结果
+    c_diameter = data['c_diameter_none']                             #c_diameter         直径
+    sqltxt = r"update grinder_data set  c_cause = '%s' , c_result_detection = '%s', c_diameter = '%s' where c_id = '%s'  LIMIT 1 ;" % (c_cause , c_result_detection , c_diameter , c_id)
     print('更新操作SQL = '+sqltxt)
     restr = {"data": '修改成功',}
     json_restr = json.dumps(restr)

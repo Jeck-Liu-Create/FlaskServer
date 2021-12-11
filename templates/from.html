@@ -31,12 +31,13 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
+
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">编辑轧辊数据</h4>
             </div>
             <div class="modal-body">
                 <form action="" class="form-horizontal">
-                    <div class="form-group">
+                    <div class="form-group" id="modal_one" style="display: block">
                         <label id="modal_c_frame_id_label" class="col-sm-2 control-label">机架号</label>
                         <div class="col-sm-3">
                                 <select id="modal_c_frame_id" class="form-control" name="c_frame_id" >
@@ -58,7 +59,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group"id="modal_tow" style="display: block">
                         <label id="modal_c_roll_position_label" class="col-sm-2 control-label">轧辊位置</label>
                         <div class="col-sm-3">
                             <select id="modal_c_roll_position" class="form-control" name="c_roll_position" >
@@ -82,10 +83,10 @@
                     <div class="form-group">
                         <label for="modal_c_diameter" class="col-sm-2 control-label">轧辊直径</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" disabled="disabled" id="modal_c_diameter">
+                            <input type="text" class="form-control"  id="modal_c_diameter">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="modal_three" style="display: block">
                         <label for="modal_c_crown_value" class="col-sm-2 control-label">凸度值(4位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control"  id="modal_c_crown_value" value="0000">
@@ -99,7 +100,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="modal_four" style="display: block"  >
                         <label for="modal_c_roughness" class="col-sm-2 control-label">粗糙度(3位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control"  id="modal_c_roughness">
@@ -109,7 +110,7 @@
                             <input type="text" class="form-control" disabled="disabled" id="modal_c_do" value="磨削">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="modal_five" style="display: block">
                         <label for="modal_c_side_bearing" class="col-sm-2 control-label">操作侧轴承号(8位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="modal_c_side_bearing">
@@ -123,15 +124,15 @@
                         <input type="hidden" class="form-control" disabled="disabled" id="modal_c_id">
                         <input type="hidden" class="form-control" disabled="disabled" id="modal_index">
                         <label for="modal_c_roll_number" class="col-sm-2 control-label">轧辊编号</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3" id="modal_other">
                             <input type="text" class="form-control" disabled="disabled" id="modal_c_roll_number">
                         </div>
-                        <label for="modal_c_pairing_roll" class="col-sm-2 control-label">配对辊号(10位)</label>
-                        <div class="col-sm-3">
+                        <label for="modal_c_pairing_roll" class="col-sm-2 control-label" id="modal_six" style="display: block">配对辊号(10位)</label>
+                        <div class="col-sm-3" id="modal_seven" style="display: block">
                             <input type="text" class="form-control" id="modal_c_pairing_roll">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="modal_eight" style="display: block">
                         <label for="modal_c_top_diameter" class="col-sm-2 control-label">锥形顶端直径(7位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="modal_c_top_diameter">
@@ -167,12 +168,15 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <div class="col-sm-7">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" id="sava-edit-btn">保存</button>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-info  glyphicon glyphicon-retweet" id="demo" >模式切换</button>
                 </div>
                 <div class="col-sm-5">
-                    <button type="button" class="btn btn-success  glyphicon glyphicon-send" id="send-btn" disabled="disabled">&nbsp 发送</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">&nbsp 关闭 &nbsp</button>
+                    <button type="button" class="btn btn-primary" id="sava-edit-btn">&nbsp 保存 &nbsp</button>
+                </div>
+                <div class="col-sm-4" id="modal_send" style="display: block">
+                    <button type="button" class="btn btn-success  glyphicon glyphicon-send" id="send-btn" disabled="disabled" >&nbsp 发送</button>
                 </div>
             </div>
         </div>
@@ -682,6 +686,7 @@
         }
 
         $("#myModal").modal();
+        check_c_diameter();
         check_c_crown();
         check_c_roughness();
         check_c_side_bearing();
@@ -732,117 +737,304 @@
 
     });
 
+    // $(function (){
+    //     $('#send-btn').attr("style","display:block")
+    // })
+    $('#demo').click(function (){
+        var data = "dead"
+        // console.log($("#send-btn").attr("display"))
+        // if ($("#send-btn").attr("display")==null)
+        // {
+        //     console.log('12')
+        //     $('#send-btn').attr("style","display:block")
+        // }
+        // console.log(data);
+        var show = $('#modal_send').css('display');
+        if ( show == 'block')
+        {
+            $('#modal_send').attr("style","display:none")
+            $('#modal_one').attr("style","display:none")
+            $('#modal_tow').attr("style","display:none")
+            $('#modal_three').attr("style","display:none")
+            $('#modal_four').attr("style","display:none")
+            $('#modal_five').attr("style","display:none")
+            $('#modal_six').attr("style","display:none")
+            $('#modal_seven').attr("style","display:none")
+            $('#modal_eight').attr("style","display:none")
+            $('#modal_other').attr("class","col-sm-8")
+        }
+        if ( show == 'none')
+        {
+            $('#modal_send').attr("style","display:block")
+            $('#modal_one').attr("style","display:block")
+            $('#modal_tow').attr("style","display:block")
+            $('#modal_three').attr("style","display:block")
+            $('#modal_four').attr("style","display:block")
+            $('#modal_five').attr("style","display:block")
+            $('#modal_six').attr("style","display:block")
+            $('#modal_seven').attr("style","display:block")
+            $('#modal_eight').attr("style","display:block")
+            $('#modal_other').attr("class","col-sm-3")
+        }
+    });
+
 
     //保存按钮
-    $('#sava-edit-btn').click(function(){
+    $('#sava-edit-btn').click(function() {
         // addmLoading("上传中...");
+        var show = $('#modal_send').css('display');
+        if (show == 'block') {
+            var boolstr_check_c_crown = check_c_crown()
+            var boolstr_c_roughness = check_c_roughness()
+            var boolstr_c_side_bearing = check_c_side_bearing()
+            var boolstr_c_drive_bearing = check_c_drive_bearing()
+            var boolstr_c_pairing_roll = check_c_pairing_roll()
+            var boolstr_c_top_diameter = check_c_top_diameter()
+            var boolstr_c_low_diameter = check_c_low_diameter()
+            var boolstr_c_diameter = check_c_diameter()
 
-        var boolstr_check_c_crown = check_c_crown()
-        var boolstr_c_roughness = check_c_roughness()
-        var boolstr_c_side_bearing = check_c_side_bearing()
-        var boolstr_c_drive_bearing = check_c_drive_bearing()
-        var boolstr_c_pairing_roll = check_c_pairing_roll()
-        var boolstr_c_top_diameter = check_c_top_diameter()
-        var boolstr_c_low_diameter = check_c_low_diameter()
-
-        var boolstr_c_frame_id = check_c_frame_id()
-        var boolstr_c_roll_type = check_c_roll_type()
-        var boolstr_c_roll_position = check_c_roll_position()
-        var boolstr_c_roll_material = check_c_roll_material()
-        var boolstr_c_crown_symbol = check_c_crown_symbol()
+            var boolstr_c_frame_id = check_c_frame_id()
+            var boolstr_c_roll_type = check_c_roll_type()
+            var boolstr_c_roll_position = check_c_roll_position()
+            var boolstr_c_roll_material = check_c_roll_material()
+            var boolstr_c_crown_symbol = check_c_crown_symbol()
 
 
-        var boolstr =( boolstr_check_c_crown && boolstr_c_roughness && boolstr_c_side_bearing && boolstr_c_drive_bearing && boolstr_c_pairing_roll && boolstr_c_top_diameter && boolstr_c_low_diameter && boolstr_c_frame_id && boolstr_c_roll_type && boolstr_c_roll_position && boolstr_c_roll_material && boolstr_c_crown_symbol)
-        console.log(boolstr);
-        if (boolstr) {
-            var c_frame_id = $('#modal_c_frame_id').val();
-            var c_roll_type = $('#modal_c_roll_type').val();
-            var c_roll_position = $('#modal_c_roll_position').val();
-            var c_roll_material = $('#modal_c_roll_material').val();
-            var c_diameter = $('#modal_c_diameter').val();
-            var c_crown_value = $('#modal_c_crown_value').val();
-            var c_crown_symbol = $('#modal_c_crown_symbol').val();
-            var c_roughness = $('#modal_c_roughness').val();
-            var c_side_bearing = $('#modal_c_side_bearing').val();
-            var c_drive_bearing = $('#modal_c_drive_bearing').val();
+            var boolstr = (boolstr_c_diameter && boolstr_check_c_crown && boolstr_c_roughness && boolstr_c_side_bearing && boolstr_c_drive_bearing && boolstr_c_pairing_roll && boolstr_c_top_diameter && boolstr_c_low_diameter && boolstr_c_frame_id && boolstr_c_roll_type && boolstr_c_roll_position && boolstr_c_roll_material && boolstr_c_crown_symbol)
+            console.log(boolstr);
+            if (boolstr) {
+                var c_frame_id = $('#modal_c_frame_id').val();
+                var c_roll_type = $('#modal_c_roll_type').val();
+                var c_roll_position = $('#modal_c_roll_position').val();
+                var c_roll_material = $('#modal_c_roll_material').val();
+                var c_diameter = $('#modal_c_diameter').val();
+                var c_crown_value = $('#modal_c_crown_value').val();
+                var c_crown_symbol = $('#modal_c_crown_symbol').val();
+                var c_roughness = $('#modal_c_roughness').val();
+                var c_side_bearing = $('#modal_c_side_bearing').val();
+                var c_drive_bearing = $('#modal_c_drive_bearing').val();
+                var c_id = $('#modal_c_id').val();
+                var c_roll_number = $('#modal_c_roll_number').val();
+                var c_pairing_roll = $('#modal_c_pairing_roll').val();
+                var c_top_diameter = $('#modal_c_top_diameter').val();
+                var c_low_diameter = $('#modal_c_low_diameter').val();
+                var c_cause = $('#modal_c_cause').val();
+                var index = $('#modal_index').val();
+                var c_result_detection = $('#modal_c_result_detection').val();
+                var data = {
+                    data: JSON.stringify({
+                        'c_frame_id': c_frame_id,
+                        'c_roll_type': c_roll_type,
+                        'c_roll_position': c_roll_position,
+                        'c_roll_material': c_roll_material,
+                        'c_diameter': c_diameter,
+                        'c_crown_value': c_crown_value,
+                        'c_crown_symbol': c_crown_symbol,
+                        'c_roughness': c_roughness,
+                        'c_side_bearing': c_side_bearing,
+                        'c_drive_bearing': c_drive_bearing,
+                        'c_id': c_id,
+                        'c_roll_number': c_roll_number,
+                        'c_pairing_roll': c_pairing_roll,
+                        'c_top_diameter': c_top_diameter,
+                        'c_low_diameter': c_low_diameter,
+                        'c_cause': c_cause,
+                        'c_result_detection': c_result_detection,
+                    })
+                };
+                console.log(data);
+                //将编辑数据发送到后台
+                $.ajax({
+                    type: "POST",
+                    url: "/edit",
+                    data: data,
+                    dataType: "json",
+                    success: function (res) {
+                        console.log(res);
+                        console.log(0)
+                        if (res['data'] === '修改成功') {
+                            $(function () {
+                                console.log('单行更新的index=' + index);
+                                $('#tabledata').bootstrapTable('updateRow', {
+                                    index: index - 1,               //行索引
+                                    row: {
+                                        c_frame_id: c_frame_id,
+                                        c_roll_type: c_roll_type,
+                                        c_roll_position: c_roll_position,
+                                        c_roll_material: c_roll_material,
+                                        c_crown_symbol: c_crown_symbol,
+                                        c_roughness: c_roughness,
+                                        c_side_bearing: c_side_bearing,
+                                        c_drive_bearing: c_drive_bearing,
+                                        c_pairing_roll: c_pairing_roll,
+                                        c_top_diameter: c_top_diameter,
+                                        c_low_diameter: c_low_diameter,
+                                        c_cause: c_cause,
+                                        c_result_detection: c_result_detection,
+                                        c_crown_value: c_crown_value,
+                                    }
+                                })
+                            })
+                            $.message({
+                                message: '保存成功',
+                                duration: '1000',
+                                center: true,
+                                type: 'success'
+                            });
+                            $('#send-btn').removeAttr('disabled')
+                        } else {
+                            $.message({
+                                message: '保存失败',
+                                duration: '1000',
+                                center: true,
+                                type: 'error'
+                            });
+                        }
+
+                    },
+                    error: function (res) {
+                        console.log(res);
+                        console.log(1);
+                        $.message({
+                            message: '服务器连接失败',
+                            type: 'warning',
+                            duration: 0,
+                            showClose: true,
+                            center: true,
+                            onClose: function () {
+                                alert('知道了')
+                            }
+                        });
+                    },
+
+                });
+                // setTimeout(function(){
+                //     clearmLoading();
+                // },3000);//300代表延迟毫秒值
+            } else {
+                $.message({
+                    message: '数据不正确',
+                    duration: '1000',
+                    center: true,
+                    type: 'warning',
+                    showClose: false,
+                });
+            }
+        } else {
+            var boolstr_c_diameter_none = check_c_diameter();
+            var boolstr_none = boolstr_c_diameter_none;
+            console.log(boolstr_none);
+            if (boolstr_none) {
+                var c_diameter_none = $('#modal_c_diameter').val();
+                var c_id_none = $('#modal_c_id').val();
+                var index_none = $('#modal_index').val();
+                var c_cause_none = $('#modal_c_cause').val();
+                var c_result_detection_none = $('#modal_c_result_detection').val();
+                var data_none = {
+                    data: JSON.stringify({
+                        'c_diameter_none': c_diameter_none,
+                        'c_id_none': c_id_none,
+                        'c_cause_none': c_cause_none,
+                        'c_result_detection_none': c_result_detection_none
+                    })
+                };
+                console.log(data_none);
+                $.ajax({
+                    type: "POST",
+                    url: "/editnone",
+                    data: data_none,
+                    dataType: "json",
+                    success: function (res) {
+                        console.log(res);
+                        console.log(0)
+                        if (res['data'] === '修改成功') {
+                            $(function () {
+                                console.log('单行更新的index=' + index_none);
+                                $('#tabledata').bootstrapTable('updateRow', {
+                                    index: index_none - 1,               //行索引
+                                    row: {
+                                        c_id_none: c_id_none,
+                                        c_diameter: c_diameter_none,
+                                        c_cause: c_cause_none,
+                                        c_result_detection: c_result_detection_none
+                                    }
+                                })
+                            })
+                            $.message({
+                                message: '保存成功',
+                                duration: '1000',
+                                center: true,
+                                type: 'success'
+                            });
+                            $('#send-btn').removeAttr('disabled')
+                        } else {
+                            $.message({
+                                message: '保存失败',
+                                duration: '1000',
+                                center: true,
+                                type: 'error'
+                            });
+                        }
+                    },
+                    error: function (res) {
+                        console.log(res);
+                        console.log(1);
+                        $.message({
+                            message: '服务器连接失败',
+                            type: 'warning',
+                            duration: 0,
+                            showClose: true,
+                            center: true,
+                            onClose: function () {
+                                alert('知道了')
+                            }
+                        });
+                    },
+                });
+            } else {
+                $.message({
+                    message: '数据不正确',
+                    duration: '1000',
+                    center: true,
+                    type: 'warning',
+                    showClose: false,
+                });
+            }
+        }
+    });
+
+
+    $('#send-btn').click(function (){
             var c_id = $('#modal_c_id').val();
-            var c_roll_number = $('#modal_c_roll_number').val();
-            var c_pairing_roll = $('#modal_c_pairing_roll').val();
-            var c_top_diameter = $('#modal_c_top_diameter').val();
-            var c_low_diameter = $('#modal_c_low_diameter').val();
-            var c_cause = $('#modal_c_cause').val();
-            var index = $('#modal_index').val();
-            var c_result_detection = $('#modal_c_result_detection').val();
             var data = {
                 data: JSON.stringify({
-                    'c_frame_id': c_frame_id,
-                    'c_roll_type': c_roll_type,
-                    'c_roll_position': c_roll_position,
-                    'c_roll_material': c_roll_material,
-                    'c_diameter': c_diameter,
-                    'c_crown_value': c_crown_value,
-                    'c_crown_symbol': c_crown_symbol,
-                    'c_roughness': c_roughness,
-                    'c_side_bearing': c_side_bearing,
-                    'c_drive_bearing': c_drive_bearing,
                     'c_id': c_id,
-                    'c_roll_number': c_roll_number,
-                    'c_pairing_roll': c_pairing_roll,
-                    'c_top_diameter': c_top_diameter,
-                    'c_low_diameter': c_low_diameter,
-                    'c_cause': c_cause,
-                    'c_result_detection': c_result_detection,
                 })
             };
-            console.log(data);
-            //将编辑数据发送到后台
             $.ajax({
                 type: "POST",
-                url: "/edit",
+                url: "/send",
                 data: data,
                 dataType: "json",
                 success: function (res) {
                     console.log(res);
                     console.log(0)
-                    if (res['data'] === '修改成功') {
-                        $(function () {
-                            console.log('单行更新的index=' + index);
-                            $('#tabledata').bootstrapTable('updateRow', {
-                                index: index - 1,               //行索引
-                                row: {
-                                    c_frame_id: c_frame_id,
-                                    c_roll_type: c_roll_type,
-                                    c_roll_position: c_roll_position,
-                                    c_roll_material: c_roll_material,
-                                    c_crown_symbol: c_crown_symbol,
-                                    c_roughness: c_roughness,
-                                    c_side_bearing: c_side_bearing,
-                                    c_drive_bearing: c_drive_bearing,
-                                    c_pairing_roll: c_pairing_roll,
-                                    c_top_diameter: c_top_diameter,
-                                    c_low_diameter: c_low_diameter,
-                                    c_cause: c_cause,
-                                    c_result_detection: c_result_detection,
-                                    c_crown_value: c_crown_value,
-                                }
-                            })
-                        })
+                    if (res['data'] === '发送成功') {
                         $.message({
-                            message: '保存成功',
+                            message: '发送成功',
                             duration: '1000',
                             center: true,
                             type: 'success'
                         });
-                        $('#send-btn').removeAttr('disabled')
+                        $('#send-btn').attr('disabled', 'disabled')
                     } else {
                         $.message({
-                            message: '保存失败',
+                            message: '发送失败',
                             duration: '1000',
                             center: true,
                             type: 'error'
                         });
                     }
-
                 },
                 error: function (res) {
                     console.log(res);
@@ -858,67 +1050,8 @@
                         }
                     });
                 },
-
             });
-            // setTimeout(function(){
-            //     clearmLoading();
-            // },3000);//300代表延迟毫秒值
-        }
-        else {
-            $.message({
-                message: '数据不正确',
-                duration: '1000',
-                center: true,
-                type: 'warning',
-                showClose:false,
-            });
-        }
-    });
 
-    $('#send-btn').click(function (){
-        var c_id= $('#modal_c_id').val();
-        var data = {
-            data : JSON.stringify({
-            'c_id' : c_id,
-                })
-        };
-        $.ajax({
-             type: "POST",
-             url: "/send",
-             data: data,
-            dataType: "json",
-            success: function(res){
-                console.log(res);
-                console.log(0)
-                if (res['data'] === '发送成功'){
-                    $.message({
-                        message:'发送成功',
-                        duration:'1000',
-                        center:true,
-                        type:'success'});
-                    $('#send-btn').attr('disabled','disabled')
-                }else {
-                    $.message({
-                        message:'发送失败',
-                        duration:'1000',
-                        center:true,
-                        type:'error'});
-                }
-            },
-            error: function (res){
-                console.log(res);
-                console.log(1);
-                $.message({
-                    message:'服务器连接失败',
-                    type:'warning',
-                    duration:0,
-                    showClose:true,
-                    center:true,
-                    onClose:function(){alert('知道了')}
-                });
-             },
-
-         });
     });
 
     $(function(){
@@ -932,6 +1065,7 @@
     // input校验
     $(function () {
         // 失去焦点
+        $("#modal_c_diameter").blur(check_c_diameter)               // 直径
         $("#modal_c_crown_value").blur(check_c_crown)               // 凸度值
         $("#modal_c_roughness").blur(check_c_roughness)             // 粗糙度
         $("#modal_c_side_bearing").blur(check_c_side_bearing)       // 操作侧轴承号
@@ -947,6 +1081,25 @@
 
 
     })
+    // 直径校验
+    function check_c_diameter() {
+        // 1.获取凸度值
+        var c_crown = $("#modal_c_diameter").val();
+        // 2.定义校验正则
+        // var reg_username = /^[0-9]{4}$/;
+        var reg_c_crown = /^[0-9]{3,4}.[0-9]{3}$/
+        // 3.判断是否满足校验要求，并给出提示信息
+        var flag = reg_c_crown.test(c_crown);
+        if (flag) {
+            // 凸度值名合法
+            $("#modal_c_diameter").css("border", "");
+        } else {
+            // 凸度值非法，加一个红色边框
+            $("#modal_c_diameter").css("border", "1px solid red");
+        }
+        // 4.返回是否通过校验
+        return flag;
+    }
 
     // 凸度值校验
     function check_c_crown() {
