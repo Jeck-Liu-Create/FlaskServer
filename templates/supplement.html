@@ -244,8 +244,6 @@
                         <label id="modal_c_roll_material_label_add" class="col-sm-2 control-label">轧辊材质</label>
                         <div class="col-sm-3">
                             <select id="modal_c_roll_material_add" class="form-control" name="c_roll_material" >
-<!--
-<option selected hidden disabled value="">选择轧辊材质</option>-->
                                 <option>01:CastSteel</option>
                                 <option>02:Ni-Cr</option>
                                 <option>03:Hi-Cr</option>
@@ -272,7 +270,6 @@
                         <label id="modal_c_crown_symbol_label_add" class="col-sm-2 control-label">凸度正负标记</label>
                         <div class="col-sm-3">
                             <select id="modal_c_crown_symbol_add" class="form-control" name="c_crown_symbol" >
-<!--                                <option selected hidden disabled value="">选择凸度正负标记</option>-->
                                 <option>1:负</option>
                                 <option selected>2:正</option>
                             </select>
@@ -311,6 +308,26 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="modal_c_roundness_add" class="col-sm-2 control-label">圆度</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="modal_c_roundness_add">
+                        </div>
+                        <label for="modal_c_cylindricity_add" class="col-sm-2 control-label">圆柱度</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="modal_c_cylindricity_add">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal_c_coaxiality_add" class="col-sm-2 control-label">同轴度</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="modal_c_coaxiality_add">
+                        </div>
+                        <label for="modal_c_error_add" class="col-sm-2 control-label">误差</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="modal_c_error_add">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="modal_c_top_diameter" class="col-sm-2 control-label">锥形顶端直径(7位)</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="modal_c_top_diameter_add" value="0000000">
@@ -343,7 +360,6 @@
                             <textarea  type="text" class="form-control" id="modal_c_result_detection_add">裂纹探伤结果：&#10;软点探伤结果：</textarea >
                         </div>
                     </div>
-
                 </form>
             </div>
             <div class="modal-footer">
@@ -636,19 +652,19 @@
                 field: 'c_roundness',
                 title: '圆度',
                 align: 'center',
-                visible: false,
+                visible: true,
             }, {
             //#13 圆柱度
                 field: 'c_cylindricity',
                 title: '圆柱度',
                 align: 'center',
-                visible: false,
+                visible: true,
             }, {
             //#14 同轴度
                 field: 'c_coaxiality',
                 title: '同轴度',
                 align: 'center',
-                visible: false,
+                visible: true,
             }, {
             //#15 粗糙度
                 field: 'c_roughness',
@@ -659,7 +675,7 @@
                 field: 'c_error',
                 title: '误差',
                 align: 'center',
-                visible: false,
+                visible: true,
             }, {
             //#17 磨削原因
                 field: 'c_cause',
@@ -1144,11 +1160,17 @@
         var boolstr_c_diameter_add = check_c_diameter_add()
         var boolstr_c_roll_number_add = check_c_roll_number_add()
 
+        var boolstr_c_roundness_add = check_c_roundness_add()
+        var boolste_c_cylindricity_add = check_c_cylindricity_add()
+        var boolste_c_coaxiality_add = check_c_coaxiality_add()
+        var boolste_c_error_add = check_c_error_add()
+
 
         var boolstr = (boolstr_check_c_crown_add && boolstr_c_roughness_add && boolstr_c_side_bearing_add && boolstr_c_drive_bearing_add
         && boolstr_c_pairing_roll_add && boolstr_c_top_diameter_add && boolstr_c_low_diameter_add && boolstr_c_frame_id_add && boolstr_c_roll_type_add
         && boolstr_c_roll_position_add && boolstr_c_roll_material_add && boolstr_c_crown_symbol_add && boolstr_c_diameter_add
-        && boolstr_c_roll_number_add && boolstr_c_diameter_before_add)
+        && boolstr_c_roll_number_add && boolstr_c_diameter_before_add && boolstr_c_roundness_add && boolste_c_cylindricity_add
+        && boolste_c_coaxiality_add && boolste_c_error_add)
 
         if (boolstr) {
             var c_frame_id = $('#modal_c_frame_id_add').val();
@@ -1171,6 +1193,10 @@
             var c_end_time = $('#e_time_add').val();
             var c_grinding_machine = $("#roll_add").val();
             var c_diameter_before = $("#modal_c_diameter_before_add").val();
+            var c_roundness = $("#modal_c_roundness_add").val();
+            var c_cylindricity = $('#modal_c_cylindricity_add').val();
+            var c_coaxiality = $('#modal_c_coaxiality_add').val();
+            var c_error = $('#modal_c_error_add').val();
             var data = {
                 data: JSON.stringify({
                     'c_frame_id': c_frame_id,
@@ -1192,7 +1218,11 @@
                     'c_start_time': c_start_time,
                     'c_end_time': c_end_time,
                     'c_grinding_machine': c_grinding_machine,
-                    'c_diameter_before': c_diameter_before
+                    'c_diameter_before': c_diameter_before,
+                    'c_roundness': c_roundness,
+                    'c_cylindricity': c_cylindricity,
+                    'c_coaxiality': c_coaxiality,
+                    'c_error': c_error
                 })
             };
             console.log(data);
@@ -1589,7 +1619,93 @@
         $("#modal_c_roll_number_add").blur(check_c_roll_number_add)         // 轧辊编号
         $("#modal_c_diameter_add").blur(check_c_diameter_add)               // 轧辊磨后直径
         $("#modal_c_diameter_before_add").blur(check_c_diameter_before_add) // 轧辊磨前直径
+        $("#modal_c_roundness_add").blur(check_c_roundness_add)             // 圆度
+        $("#modal_c_cylindricity_add").blur(check_c_cylindricity_add)       // 圆柱度
+        $("#modal_c_coaxiality_add").blur(check_c_coaxiality_add)           // 同轴度
+        $("#modal_c_error_add").blur(check_c_error_add)                     // 误差
     })
+
+    // 误差校验
+    function check_c_error_add(){
+        // 1.获误差
+        var c_crown = $("#modal_c_error_add").val();
+        // 2.定义校验正则
+        // var reg_username = /^[0-9]{4}$/;
+        var reg_c_crown = /^[0-9]{1}.[0-9]{3}$/
+        // 3.判断是否满足校验要求，并给出提示信息
+        var flag = reg_c_crown.test(c_crown);
+        if (flag) {
+            // 误差合法
+            $("#modal_c_error_add").css("border", "");
+        } else {
+            // 误差非法，加一个红色边框
+            $("#modal_c_error_add").css("border", "1px solid red");
+        }
+        // 4.返回是否通过校验
+        return flag;
+    }
+
+    // 同轴度校验
+    function check_c_coaxiality_add(){
+        // 1.获取同轴度
+        var c_crown = $("#modal_c_coaxiality_add").val();
+        // 2.定义校验正则
+        // var reg_username = /^[0-9]{4}$/;
+        var reg_c_crown = /^[0-9]{1}.[0-9]{3}$/
+        // 3.判断是否满足校验要求，并给出提示信息
+        var flag = reg_c_crown.test(c_crown);
+        if (flag) {
+            // 同轴度名合法
+            $("#modal_c_coaxiality_add").css("border", "");
+        } else {
+            // 同轴度非法，加一个红色边框
+            $("#modal_c_coaxiality_add").css("border", "1px solid red");
+        }
+        // 4.返回是否通过校验
+        return flag;
+    }
+
+    // 圆柱度校验
+    function check_c_cylindricity_add(){
+        // 1.获取圆度
+        var c_crown = $("#modal_c_cylindricity_add").val();
+        // 2.定义校验正则
+        // var reg_username = /^[0-9]{4}$/;
+        var reg_c_crown = /^[0-9]{1}.[0-9]{3}$/
+        // 3.判断是否满足校验要求，并给出提示信息
+        var flag = reg_c_crown.test(c_crown);
+        if (flag) {
+            // 圆度名合法
+            $("#modal_c_cylindricity_add").css("border", "");
+        } else {
+            // 圆度非法，加一个红色边框
+            $("#modal_c_cylindricity_add").css("border", "1px solid red");
+        }
+        // 4.返回是否通过校验
+        return flag;
+    }
+
+
+    // 圆度校验
+    function check_c_roundness_add(){
+        // 1.获取圆度
+        var c_crown = $("#modal_c_roundness_add").val();
+        // 2.定义校验正则
+        // var reg_username = /^[0-9]{4}$/;
+        var reg_c_crown = /^[0-9]{1}.[0-9]{3}$/
+        // 3.判断是否满足校验要求，并给出提示信息
+        var flag = reg_c_crown.test(c_crown);
+        if (flag) {
+            // 圆度名合法
+            $("#modal_c_roundness_add").css("border", "");
+        } else {
+            // 圆度非法，加一个红色边框
+            $("#modal_c_roundness_add").css("border", "1px solid red");
+        }
+        // 4.返回是否通过校验
+        return flag;
+    }
+
     // 轧辊磨后直径检验
     function check_c_diameter_before_add() {
         // 1.获取凸度值
