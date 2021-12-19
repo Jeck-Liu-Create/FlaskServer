@@ -100,12 +100,12 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group" id="modal_four" style="display: block"  >
+                    <div class="form-group" style="display: block" >
                         <label for="modal_c_roughness" class="col-sm-2 control-label">粗糙度(3位)</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3" id="modal_other">
                             <input type="text" class="form-control"  id="modal_c_roughness">
                         </div>
-                        <label for="modal_c_do" class="col-sm-2 control-label">表面加工方式</label>
+                        <label for="modal_c_do" class="col-sm-2 control-label" id="modal_four">表面加工方式</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" disabled="disabled" id="modal_c_do" value="磨削">
                         </div>
@@ -113,7 +113,14 @@
                     <div class="form-group" id="modal_five" style="display: block">
                         <label for="modal_c_side_bearing" class="col-sm-2 control-label">操作侧轴承号(8位)</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" id="modal_c_side_bearing">
+<!--                            <input type="text" class="form-control" id="modal_c_side_bearing">-->
+                            <select id="modal_c_side_bearing" class="form-control" name="c_side_bearing" >
+                                <option selected hidden disabled value="">请选择操作侧轴承号</option>
+                                <option>正常磨削</option>
+                                <option>配辊磨削</option>
+                                <option>事故加磨</option>
+                                <option>断带无伤</option>
+                            </select>
                         </div>
                         <label for="modal_c_drive_bearing" class="col-sm-2 control-label">驱动侧轴承号(8位)</label>
                         <div class="col-sm-3">
@@ -124,7 +131,7 @@
                         <input type="hidden" class="form-control" disabled="disabled" id="modal_c_id">
                         <input type="hidden" class="form-control" disabled="disabled" id="modal_index">
                         <label for="modal_c_roll_number" class="col-sm-2 control-label">轧辊编号</label>
-                        <div class="col-sm-3" id="modal_other">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control" disabled="disabled" id="modal_c_roll_number">
                         </div>
                         <label for="modal_c_pairing_roll" class="col-sm-2 control-label" id="modal_six" style="display: block">配对辊号(10位)</label>
@@ -757,9 +764,8 @@
             $('#modal_tow').attr("style","display:none")
             $('#modal_three').attr("style","display:none")
             $('#modal_four').attr("style","display:none")
+            $('#modal_c_do').attr("style","display:none")
             $('#modal_five').attr("style","display:none")
-            $('#modal_six').attr("style","display:none")
-            $('#modal_seven').attr("style","display:none")
             $('#modal_eight').attr("style","display:none")
             $('#modal_other').attr("class","col-sm-8")
         }
@@ -770,9 +776,8 @@
             $('#modal_tow').attr("style","display:block")
             $('#modal_three').attr("style","display:block")
             $('#modal_four').attr("style","display:block")
+            $('#modal_c_do').attr("style","display:block")
             $('#modal_five').attr("style","display:block")
-            $('#modal_six').attr("style","display:block")
-            $('#modal_seven').attr("style","display:block")
             $('#modal_eight').attr("style","display:block")
             $('#modal_other').attr("class","col-sm-3")
         }
@@ -921,8 +926,7 @@
                 });
             }
         } else {
-            var boolstr_c_diameter_none = check_c_diameter();
-            var boolstr_none = boolstr_c_diameter_none;
+            var boolstr_none = (check_c_diameter() && check_c_roughness() && check_c_pairing_roll());
             console.log(boolstr_none);
             if (boolstr_none) {
                 var c_diameter_none = $('#modal_c_diameter').val();
@@ -930,12 +934,16 @@
                 var index_none = $('#modal_index').val();
                 var c_cause_none = $('#modal_c_cause').val();
                 var c_result_detection_none = $('#modal_c_result_detection').val();
+                var c_roughness_none = $('#modal_c_roughness').val();
+                var c_pairing_roll_none = $('#modal_c_pairing_roll').val();
                 var data_none = {
                     data: JSON.stringify({
                         'c_diameter_none': c_diameter_none,
                         'c_id_none': c_id_none,
                         'c_cause_none': c_cause_none,
-                        'c_result_detection_none': c_result_detection_none
+                        'c_result_detection_none': c_result_detection_none,
+                        'c_roughness_none': c_roughness_none,
+                        'c_pairing_roll_none': c_pairing_roll_none,
                     })
                 };
                 console.log(data_none);
@@ -956,7 +964,9 @@
                                         c_id_none: c_id_none,
                                         c_diameter: c_diameter_none,
                                         c_cause: c_cause_none,
-                                        c_result_detection: c_result_detection_none
+                                        c_result_detection: c_result_detection_none,
+                                        c_roughness: c_roughness_none,
+                                        c_pairing_roll: c_pairing_roll_none,
                                     }
                                 })
                             })
@@ -1338,6 +1348,25 @@
         }
 
         return flag
+    }
+
+    // 更新操作侧轴承箱号下拉框
+    function update_c_side_bearing() {
+        $.ajax({
+            type:"GET",
+            url:"/update_c_side_bearing",
+            async:true,
+            success:function (data) {
+                var c_side_bearing_list = data;
+                var rSelect = "<option>——请选择角色——</option>";
+                for(var i = 0; i < c_side_bearing_list.length; i++){
+                    rSelect += ("<option value = '"+c_side_bearing_list[i].nane+"'>"+c_side_bearing_list[i].name+"</option>");
+                }
+                $("#modal_c_side_bearing").empty();
+                $("#modal_c_side_bearing").append(rSelect);
+            }
+
+        })
     }
 
 </script>

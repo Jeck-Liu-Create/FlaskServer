@@ -168,7 +168,9 @@ def editnone():
     c_cause = data['c_cause_none']                                   #c_cause            磨削原因
     c_result_detection = data['c_result_detection_none']             #c_result_detection 探伤结果
     c_diameter = data['c_diameter_none']                             #c_diameter         直径
-    sqltxt = r"update grinder_data set  c_cause = '%s' , c_result_detection = '%s', c_diameter = '%s' where c_id = '%s'  LIMIT 1 ;" % (c_cause , c_result_detection , c_diameter , c_id)
+    c_roughness = data['c_roughness_none']                           #c_roughness        粗糙度
+    c_pairing_roll = data['c_pairing_roll_none']                     # c_pairing_roll     配对辊号
+    sqltxt = r"update grinder_data set  c_cause = '%s' , c_result_detection = '%s', c_diameter = '%s' , c_roughness = '%s', c_pairing_roll = '%s' where c_id = '%s'  LIMIT 1 ;" % (c_cause , c_result_detection , c_diameter , c_id , c_roughness , c_pairing_roll)
     print('更新操作SQL = '+sqltxt)
     restr = {"data": '修改成功',}
     json_restr = json.dumps(restr)
@@ -709,6 +711,11 @@ def reload_send_data():
         sqltxt = r"select * from send_succeed where send_time >= '%s' and send_time <= '%s' and c_roll_number ='%s' ORDER BY c_id desc;"%(StartTime,EndTime,ROLLNM)
     print("reload查询"+sqltxt)
     return info_send_data(sqltxt)
+
+#操作侧轴承箱号列表更新
+# @app.route('/update_c_side_bearing', methods=["GET","POST"])
+
+
 
 if __name__ == "__main__":
     app.run(port=5000,host='0.0.0.0')
