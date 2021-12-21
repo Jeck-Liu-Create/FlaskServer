@@ -357,7 +357,7 @@
                         </div>
                         <label for="modal_c_result_detection" class="col-sm-2 control-label">探伤结果</label>
                         <div class="col-sm-3">
-                            <textarea  type="text" class="form-control" id="modal_c_result_detection_add">裂纹探伤结果：&#10;软点探伤结果：</textarea >
+                                <textarea  type="text" class="form-control" id="modal_c_result_detection_add" >裂纹探伤结果:&#10;软点探伤结果:</textarea>
                         </div>
                     </div>
                 </form>
@@ -794,13 +794,11 @@
     });
 
     }
-
-    function actionFormatter( value, row) {
+        function actionFormatter( value, row) {
         var result = "";
         // list = [ [0]ID , [1]轧辊号 ， [2]直径  ， [3]机架号 ，[4]轧辊类型 ，[5]轧辊位置 ，[6]轧辊材质 ， [7]凸度正负标记 ， [8]粗糙度， [9]操作侧轴承号 ， [10]驱动侧轴承号 ， [11]配对辊号 ， [12]锥形顶端直径 ， [13]锥形底端直径 ， [14]索引, [15]磨削原因， [16]探伤结果, [17]凸度值 ]
-        var list = [row.c_id,row.c_roll_number,row.c_diameter,row.c_frame_id,row.c_roll_type,row.c_roll_position,row.c_roll_material,row.c_crown_symbol,row.c_roughness,row.c_side_bearing,row.c_drive_bearing,row.c_pairing_roll,row.c_top_diameter,row.c_low_diameter,row.number,row.c_cause,row.c_result_detection,row.c_crown_value];
-        result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"EditViewById('" + list + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
-        result += "<a href='javascript:;' class='btn btn-xs red' onclick=\"DeleteByIds('" + list + "')\" title='删除'><span class='glyphicon glyphicon-trash'></span></a>";
+        var list_del = [row.c_id];
+        result += "<a href='#' class='btn btn-xs red' onclick=\"DeleteByIds('"+list_del+"')\" title='删除'><span class='glyphicon glyphicon-trash'></span></a>";
         return result;
     }
 

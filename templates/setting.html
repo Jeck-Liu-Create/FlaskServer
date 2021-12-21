@@ -113,7 +113,14 @@
                     <div class="form-group" id="modal_five" style="display: block">
                         <label for="modal_c_side_bearing" class="col-sm-2 control-label">操作侧轴承号(8位)</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" id="modal_c_side_bearing" ondblclick="">
+<!--                            <input type="text" class="form-control" id="modal_c_side_bearing">-->
+                            <select id="modal_c_side_bearing" class="form-control" name="c_side_bearing" >
+                                <option selected hidden disabled value="">请选择操作侧轴承号</option>
+                                <option>正常磨削</option>
+                                <option>配辊磨削</option>
+                                <option>事故加磨</option>
+                                <option>断带无伤</option>
+                            </select>
                         </div>
                         <label for="modal_c_drive_bearing" class="col-sm-2 control-label">驱动侧轴承号(8位)</label>
                         <div class="col-sm-3">
@@ -1360,10 +1367,6 @@
             }
 
         })
-    }
-
-    function selectdate(){
-
     }
 
 </script>
