@@ -288,11 +288,13 @@
                     <div class="form-group">
                         <label for="modal_c_side_bearing" class="col-sm-2 control-label">操作侧轴承号(8位)</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" id="modal_c_side_bearing_add">
+                            <input type="text" class="form-control" id="modal_c_side_bearing_add" list="typelist">
+                            <datalist id="typelist"></datalist>
                         </div>
                         <label for="modal_c_drive_bearing" class="col-sm-2 control-label">驱动侧轴承号(8位)</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" id="modal_c_drive_bearing_add">
+                            <input type="text" class="form-control" id="modal_c_drive_bearing_add" list="c_drive_bearing_list">
+                            <datalist id="c_drive_bearing_list"></datalist>
                         </div>
                     </div>
                     <div class="form-group">
@@ -2001,6 +2003,63 @@
 
         return flag
     }
+
+    $(function (){
+        console.log("操作侧轴承箱号同步")
+        $.ajax({
+            type:"GET",
+            url:"/update_c_side_bearing",
+            async: true,
+            success:function (data){
+                console.log(data)
+                console.log(typeof data)
+                var rList=[];
+                data = data.replace('[','')
+                data = data.replace(']','')
+                data = data.replace(/\"/g, '');
+                data = data.split(',')
+                for(j = 0; j < data.length; j++) {
+                    rList.push(data[j].replace(/\s*/g,""))
+                }
+
+                console.log(rList)
+                var rdatalist = "<option></option>";
+                for (var i = 0; i < rList.length; i++){
+                    rdatalist += ("<option>"+rList[i]+"</option>");
+                }
+                $("#typelist").empty();
+                $("#typelist").append(rdatalist);
+            }
+        })
+    })
+    $(function (){
+        console.log("驱动侧轴承箱号同步")
+        $.ajax({
+            type:"GET",
+            url:"/update_c_drive_bearing",
+            async: true,
+            success:function (data){
+                console.log(data)
+                console.log(typeof data)
+                var rList=[];
+                data = data.replace('[','')
+                data = data.replace(']','')
+                data = data.replace(/\"/g, '');
+                data = data.split(',')
+                for(j = 0; j < data.length; j++) {
+                    rList.push(data[j].replace(/\s*/g,""))
+                }
+
+                console.log(rList)
+                var rdatalist = "<option></option>";
+                for (var i = 0; i < rList.length; i++){
+                    rdatalist += ("<option>"+rList[i]+"</option>");
+                }
+                $("#c_drive_bearing_list").empty();
+                $("#c_drive_bearing_list").append(rdatalist);
+            }
+        })
+    })
 
 
 </script>

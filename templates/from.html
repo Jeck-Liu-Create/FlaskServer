@@ -113,11 +113,13 @@
                     <div class="form-group" id="modal_five" style="display: block">
                         <label for="modal_c_side_bearing" class="col-sm-2 control-label">操作侧轴承号(8位)</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" id="modal_c_side_bearing" ondblclick="">
+                            <input type="text" class="form-control" id="modal_c_side_bearing" list="typelist">
+                            <datalist id="typelist"></datalist>
                         </div>
                         <label for="modal_c_drive_bearing" class="col-sm-2 control-label">驱动侧轴承号(8位)</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" id="modal_c_drive_bearing">
+                            <input type="text" class="form-control" id="modal_c_drive_bearing" list="c_drive_bearing_list">
+                            <datalist id="c_drive_bearing_list"></datalist>
                         </div>
                     </div>
                     <div class="form-group">
@@ -709,28 +711,7 @@
     $(function (){updata()})
     //搜索按钮
     $('#send').click(function(){
-        // var s_time = $('#s_time').val();
-        // s_time = s_time.replace("T"," ")
-        // var e_time = $('#e_time').val();
-        // e_time = e_time.replace("T"," ")
-        // console.log(s_time)
-        // console.log(e_time)
-        //
-        // var day1 = new Date(s_time);
-        // var day2 = new Date(e_time);
-        //
-        // var difference = (day2 - day1) / (1000 * 60 * 60 * 24)
-        // console.log(difference)
-        // console.log('搜索');
-        // if (difference <= 180 && difference > 0){
-        //     $("#tabledata").bootstrapTable('destroy');
-        //
-        //     updata();
-        // }else if (difference > 180){
-        //     alert("要求搜索时间范围不超过180天")
-        // }else if (difference < 0){
-        //     alert("开始时间需要小于结束时间")
-        // }
+
         $("#tabledata").bootstrapTable('destroy');
 
         updata();
@@ -1362,9 +1343,62 @@
         })
     }
 
-    function selectdate(){
+    $(function (){
+        console.log("操作侧轴承箱号同步")
+        $.ajax({
+            type:"GET",
+            url:"/update_c_side_bearing",
+            async: true,
+            success:function (data){
+                console.log(data)
+                console.log(typeof data)
+                var rList=[];
+                data = data.replace('[','')
+                data = data.replace(']','')
+                data = data.replace(/\"/g, '');
+                data = data.split(',')
+                for(j = 0; j < data.length; j++) {
+                    rList.push(data[j].replace(/\s*/g,""))
+                }
 
-    }
+                console.log(rList)
+                var rdatalist = "<option></option>";
+                for (var i = 0; i < rList.length; i++){
+                    rdatalist += ("<option>"+rList[i]+"</option>");
+                }
+                $("#typelist").empty();
+                $("#typelist").append(rdatalist);
+            }
+        })
+    })
+    $(function (){
+        console.log("驱动侧轴承箱号同步")
+        $.ajax({
+            type:"GET",
+            url:"/update_c_drive_bearing",
+            async: true,
+            success:function (data){
+                console.log(data)
+                console.log(typeof data)
+                var rList=[];
+                data = data.replace('[','')
+                data = data.replace(']','')
+                data = data.replace(/\"/g, '');
+                data = data.split(',')
+                for(j = 0; j < data.length; j++) {
+                    rList.push(data[j].replace(/\s*/g,""))
+                }
+
+                console.log(rList)
+                var rdatalist = "<option></option>";
+                for (var i = 0; i < rList.length; i++){
+                    rdatalist += ("<option>"+rList[i]+"</option>");
+                }
+                $("#c_drive_bearing_list").empty();
+                $("#c_drive_bearing_list").append(rdatalist);
+            }
+        })
+    })
 
 </script>
 </body>
