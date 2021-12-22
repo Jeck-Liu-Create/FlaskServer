@@ -716,46 +716,13 @@
     $(function (){updata()})
     //搜索按钮
     $('#send').click(function(){
-        // var s_time = $('#s_time').val();
-        // s_time = s_time.replace("T"," ")
-        // var e_time = $('#e_time').val();
-        // e_time = e_time.replace("T"," ")
-        // console.log(s_time)
-        // console.log(e_time)
-        //
-        // var day1 = new Date(s_time);
-        // var day2 = new Date(e_time);
-        //
-        // var difference = (day2 - day1) / (1000 * 60 * 60 * 24)
-        // console.log(difference)
-        // console.log('搜索');
-        // if (difference <= 180 && difference > 0){
-        //     $("#tabledata").bootstrapTable('destroy');
-        //
-        //     updata();
-        // }else if (difference > 180){
-        //     alert("要求搜索时间范围不超过180天")
-        // }else if (difference < 0){
-        //     alert("开始时间需要小于结束时间")
-        // }
         $("#tabledata").bootstrapTable('destroy');
 
         updata();
 
     });
 
-    // $(function (){
-    //     $('#send-btn').attr("style","display:block")
-    // })
     $('#demo').click(function (){
-        var data = "dead"
-        // console.log($("#send-btn").attr("display"))
-        // if ($("#send-btn").attr("display")==null)
-        // {
-        //     console.log('12')
-        //     $('#send-btn').attr("style","display:block")
-        // }
-        // console.log(data);
         var show = $('#modal_send').css('display');
         if ( show == 'block')
         {

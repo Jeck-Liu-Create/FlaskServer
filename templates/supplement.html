@@ -1790,7 +1790,7 @@
         // 1.获取操作侧轴承箱号
         var c_crown = $("#modal_c_side_bearing_add").val();
         // 2.定义校验正则
-        var reg_c_crown = /^\d{8}$/
+        var reg_c_crown = /^[A-Za-z0-9\\-]{8}$/
         // 3.判断是否满足校验要求，并给出提示信息
         var flag = reg_c_crown.test(c_crown);
         if (flag) {
@@ -1809,7 +1809,7 @@
         // 1.获取驱动侧轴承箱号
         var c_crown = $("#modal_c_drive_bearing_add").val();
         // 2.定义校验正则
-        var reg_c_crown = /^\d{8}$/
+        var reg_c_crown = /^[A-Za-z0-9\\-]{8}$/
         // 3.判断是否满足校验要求，并给出提示信息
         var flag = reg_c_crown.test(c_crown);
         if (flag) {
