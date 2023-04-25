@@ -27,7 +27,7 @@ class TCPclient:
                     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     client.settimeout(5)
                     client.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 4096)
-                    client.connect(("10.18.23.112", 5000))
+                    client.connect(("10.18.23.115", 5001))
                     connect = True
                 if not self.queue.empty():
                     returndata = self.queue_read()

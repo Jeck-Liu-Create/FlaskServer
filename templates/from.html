@@ -82,8 +82,16 @@
                     </div>
                     <div class="form-group">
                         <label for="modal_c_diameter" class="col-sm-2 control-label">轧辊直径</label>
-                        <div class="col-sm-8">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control"  id="modal_c_diameter">
+                        </div>
+                        <label id="modal_c_woolification_label" class="col-sm-2 control-label">是否毛化标记</label>
+                        <div class="col-sm-3">
+                            <select id="modal_c_woolification" class="form-control" name="c_woolification" >
+                                <option selected hidden disabled value="">选择是否毛化标记</option>
+                                <option>0:未毛化</option>
+                                <option>1:毛化</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group" id="modal_three" style="display: block">
@@ -575,6 +583,12 @@
                 title: 'ID',
                 visible:false,
                 align: 'center',
+            },{
+            //#38
+                field: 'c_woolification',
+                title: '是否毛化标记',
+                visible:false,
+                align: 'center',
         }
         ],
         onLoadSuccess: function (){
@@ -583,7 +597,7 @@
             showTips("数据加载失败！");
         },
         onDblClickRow: function ( row ) {
-            var list = [row.c_id,row.c_roll_number,row.c_diameter,row.c_frame_id,row.c_roll_type,row.c_roll_position,row.c_roll_material,row.c_crown_symbol,row.c_roughness,row.c_side_bearing,row.c_drive_bearing,row.c_pairing_roll,row.c_top_diameter,row.c_low_diameter,row.number,row.c_cause,row.c_result_detection,row.c_crown_value];
+            var list = [row.c_id,row.c_roll_number,row.c_diameter,row.c_frame_id,row.c_roll_type,row.c_roll_position,row.c_roll_material,row.c_crown_symbol,row.c_roughness,row.c_side_bearing,row.c_drive_bearing,row.c_pairing_roll,row.c_top_diameter,row.c_low_diameter,row.number,row.c_cause,row.c_result_detection,row.c_crown_value,row.c_woolification];
             console.log(list);
             EditViewById(list);
         }
@@ -594,8 +608,8 @@
 
     function actionFormatter( value, row) {
         var result = "";
-        // list = [ [0]ID , [1]轧辊号 ， [2]直径  ， [3]机架号 ，[4]轧辊类型 ，[5]轧辊位置 ，[6]轧辊材质 ， [7]凸度正负标记 ， [8]粗糙度， [9]操作侧轴承号 ， [10]驱动侧轴承号 ， [11]配对辊号 ， [12]锥形顶端直径 ， [13]锥形底端直径 ， [14]索引, [15]磨削原因， [16]探伤结果, [17]凸度值 ]
-        var list = [row.c_id,row.c_roll_number,row.c_diameter,row.c_frame_id,row.c_roll_type,row.c_roll_position,row.c_roll_material,row.c_crown_symbol,row.c_roughness,row.c_side_bearing,row.c_drive_bearing,row.c_pairing_roll,row.c_top_diameter,row.c_low_diameter,row.number,row.c_cause,row.c_result_detection,row.c_crown_value];
+        // list = [ [0]ID , [1]轧辊号 ， [2]直径  ， [3]机架号 ，[4]轧辊类型 ，[5]轧辊位置 ，[6]轧辊材质 ， [7]凸度正负标记 ， [8]粗糙度， [9]操作侧轴承号 ， [10]驱动侧轴承号 ， [11]配对辊号 ， [12]锥形顶端直径 ， [13]锥形底端直径 ， [14]索引, [15]磨削原因， [16]探伤结果, [17]凸度值 ,[18]是否毛化标记 ]
+        var list = [row.c_id,row.c_roll_number,row.c_diameter,row.c_frame_id,row.c_roll_type,row.c_roll_position,row.c_roll_material,row.c_crown_symbol,row.c_roughness,row.c_side_bearing,row.c_drive_bearing,row.c_pairing_roll,row.c_top_diameter,row.c_low_diameter,row.number,row.c_cause,row.c_result_detection,row.c_crown_value,row.c_woolification];
         result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"EditViewById('" + list + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
         return result;
     }
@@ -687,6 +701,16 @@
             $("#modal_c_crown_value").val(row[17]);//凸度值
         }
 
+        // $("#modal_c_woolification").val(row[18]);//是否毛化标记
+        if (row[18]===null || row[18]==='')
+        {
+            console.log(typeof row[18] +  row[18] + "未毛化");
+            $("#modal_c_woolification").val("0:未毛化");//未毛化
+        }else {
+            console.log(typeof row[18] +  row[18] + "(毛化");
+            $("#modal_c_woolification").val(row[18]);//毛化
+        }
+
         $("#myModal").modal();
         check_c_diameter();
         check_c_crown();
@@ -762,7 +786,7 @@
     $('#sava-edit-btn').click(function() {
         // addmLoading("上传中...");
         var show = $('#modal_send').css('display');
-        if (show == 'block') {
+        if (show === 'block') {
             var boolstr_check_c_crown = check_c_crown()
             var boolstr_c_roughness = check_c_roughness()
             var boolstr_c_side_bearing = check_c_side_bearing()
@@ -777,9 +801,10 @@
             var boolstr_c_roll_position = check_c_roll_position()
             var boolstr_c_roll_material = check_c_roll_material()
             var boolstr_c_crown_symbol = check_c_crown_symbol()
+            var boolstr_c_woolification = check_c_woolification()
 
 
-            var boolstr = (boolstr_c_diameter && boolstr_check_c_crown && boolstr_c_roughness && boolstr_c_side_bearing && boolstr_c_drive_bearing && boolstr_c_pairing_roll && boolstr_c_top_diameter && boolstr_c_low_diameter && boolstr_c_frame_id && boolstr_c_roll_type && boolstr_c_roll_position && boolstr_c_roll_material && boolstr_c_crown_symbol)
+            var boolstr = (boolstr_c_diameter && boolstr_check_c_crown && boolstr_c_roughness && boolstr_c_side_bearing && boolstr_c_drive_bearing && boolstr_c_pairing_roll && boolstr_c_top_diameter && boolstr_c_low_diameter && boolstr_c_frame_id && boolstr_c_roll_type && boolstr_c_roll_position && boolstr_c_roll_material && boolstr_c_crown_symbol && boolstr_c_woolification)
             console.log(boolstr);
             if (boolstr) {
                 var c_frame_id = $('#modal_c_frame_id').val();
@@ -800,6 +825,7 @@
                 var c_cause = $('#modal_c_cause').val();
                 var index = $('#modal_index').val();
                 var c_result_detection = $('#modal_c_result_detection').val();
+                var c_woolification = $('#modal_c_woolification').val();
                 var data = {
                     data: JSON.stringify({
                         'c_frame_id': c_frame_id,
@@ -819,6 +845,7 @@
                         'c_low_diameter': c_low_diameter,
                         'c_cause': c_cause,
                         'c_result_detection': c_result_detection,
+                        'c_woolification': c_woolification,
                     })
                 };
                 console.log(data);
@@ -850,6 +877,7 @@
                                         c_low_diameter: c_low_diameter,
                                         c_cause: c_cause,
                                         c_result_detection: c_result_detection,
+                                        c_woolification: c_woolification,
                                         c_crown_value: c_crown_value,
                                     }
                                 })
@@ -910,6 +938,7 @@
                 var c_result_detection_none = $('#modal_c_result_detection').val();
                 var c_roughness_none = $('#modal_c_roughness').val();
                 var c_pairing_roll_none = $('#modal_c_pairing_roll').val();
+                var c_woolification_none = $('#modal_c_woolification').val();
                 var data_none = {
                     data: JSON.stringify({
                         'c_diameter_none': c_diameter_none,
@@ -918,6 +947,7 @@
                         'c_result_detection_none': c_result_detection_none,
                         'c_roughness_none': c_roughness_none,
                         'c_pairing_roll_none': c_pairing_roll_none,
+                        'c_woolification_none': c_woolification_none,
                     })
                 };
                 console.log(data_none);
@@ -941,6 +971,7 @@
                                         c_result_detection: c_result_detection_none,
                                         c_roughness: c_roughness_none,
                                         c_pairing_roll: c_pairing_roll_none,
+                                        c_woolification: c_woolification_none,
                                     }
                                 })
                             })
@@ -1062,7 +1093,7 @@
         $("#modal_c_roll_position").blur(check_c_roll_position)     // 轧辊位置
         $("#modal_c_roll_material").blur(check_c_roll_material)     // 轧辊材质
         $("#modal_c_crown_symbol").blur(check_c_crown_symbol)     // 凸度正负标记
-
+        $("#modal_c_woolification").blur(check_c_woolification)     // 是否毛化标记
 
     })
     // 直径校验
@@ -1319,6 +1350,27 @@
         }
         else {
             $("#modal_c_crown_symbol_label").css("color","red");
+        }
+
+        return flag
+    }
+
+    // 是否毛化标记校验
+    function check_c_woolification() {
+        // 1.获取轧辊材质
+        var c_crown = $("#modal_c_woolification").val();
+        // 2.定义校验正则
+        var reg_c_crown = "选择凸度正负标记"
+        // 3.判断是否满足校验要求，并给出提示信息
+        var flag
+        flag = c_crown != null;
+
+        if (flag){
+            $("#modal_c_woolification").css("color","black");
+
+        }
+        else {
+            $("#modal_c_woolification").css("color","red");
         }
 
         return flag

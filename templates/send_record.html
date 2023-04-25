@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 <!--    <meta name="viewport" content="width=device-width" />-->
-    <title>发生记录-床数据采集发送系统</title>
+    <title>发送记录-床数据采集发送系统</title>
     <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon"/>
 <!--    @*1、Jquery组件引用*@-->
     <script src="../static/js/jquery-3.5.1.min.js"></script>
@@ -567,6 +567,12 @@
             //#36
                 field: 'c_id',
                 title: 'ID',
+                visible:false,
+                align: 'center',
+        },{
+            //#38
+                field: 'c_woolification',
+                title: '是否毛化标记',
                 visible:false,
                 align: 'center',
         }

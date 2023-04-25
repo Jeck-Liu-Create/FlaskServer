@@ -10,16 +10,19 @@
 2021/9/25 9:26   LiuDongxing      1.0         None
 '''
 
+
 # import lib
 class Change:
     # 将ajax返回的时间类型数据转化为datetime类型字符串
-    def __init__(self,data,data_to=None):
+    def __init__(self, data, data_to=None):
         self.data = data
-        self.data_to =data_to
+        self.data_to = data_to
+
     def ChangeTime(self):
-        str = self.data.replace('T',' ')
+        str = self.data.replace('T', ' ')
         print(str)
-        return  str
+        return str
+
     # 将时间数据转日期数据
     def ChangeDate(self):
         datestr = (self.ChangeTime())[0:10]
@@ -30,12 +33,14 @@ class Change:
         str = self.data[5:-1]
         print(str)
         return str
+
     def IFNone(self):
         str = ''
         if self is None:
             return str
         else:
             return self
+
     def Amount(self):
         if self.data is None:
             return None
@@ -43,5 +48,5 @@ class Change:
             return float('%.5f' % (float(self.data) - float(self.data_to)))
 
 
-if  __name__ == '__main__':
+if __name__ == '__main__':
     ch = Change('0号磨床(HIECISE-MK84160)').GetROLL()
